@@ -9,7 +9,7 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { TbArrowsExchange } from "react-icons/tb";
 export default function Home() {
-    const [words, setWords] = useState([]);
+    const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
@@ -19,7 +19,7 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getWords(param.cards as string); // Cast param.cards to string
-            setWords(data as []);
+            setWords(data as { word: string; definition: string; forgot: boolean }[]);
         };
         fetchData();
     }, []);
@@ -48,7 +48,7 @@ export default function Home() {
             {isList !== true ? (
                 <div className="max-w-md w-full h-full flex flex-col  px-10 justify-center gap-10">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {words[index] && <WordCard1 word={(words[index] as { word: string }).word} definition={(words[index] as { definition: string }).definition} forgot={(words[index] as { forgot: boolean }).forgot}></WordCard1>}
+                    {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"

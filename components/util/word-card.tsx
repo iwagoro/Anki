@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { setAsForgot, setAsLearn } from "@/components/util/data-util";
 
-export const WordCard1 = ({ word, definition, forgot }: Readonly<{ word: string; definition: string; forgot: boolean }>) => {
+export const WordCard1 = ({ word, definition, forgot }: { word: string; definition: string; forgot?: boolean }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
     const flipCard = () => {
