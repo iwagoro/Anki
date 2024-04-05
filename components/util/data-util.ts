@@ -49,17 +49,27 @@ export const getWords = async (preset: string) => {
 };
 
 export const setAsForgot = async (preset: string, index: number, words: any) => {
-    console.log("hi");
-    console.log(preset, index);
     const docRef = doc(db, "user", "test", "presets", preset);
+    console.log(index);
     words[index].forgot = true;
-    updateDoc(docRef, { words: words });
+    let cnt = 0;
+    words.map((word: any) => {
+        if (word.forgot !== true) {
+            cnt++;
+        }
+    });
+    updateDoc(docRef, { words: words, known: cnt });
 };
 
 export const setAsLearn = async (preset: string, index: number, words: any) => {
-    console.log("hi");
-    console.log(preset, index);
     const docRef = doc(db, "user", "test", "presets", preset);
     words[index].forgot = false;
-    updateDoc(docRef, { words: words });
+    let cnt = 0;
+    words.map((word: any) => {
+        if (word.forgot !== true) {
+            cnt++;
+        }
+    });
+
+    updateDoc(docRef, { words: words, known: cnt });
 };

@@ -19,7 +19,8 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getWords(param.cards as string); // Cast param.cards to string
-            setWords(data as { word: string; definition: string; forgot: boolean }[]);
+            const shuffled = data.sort(() => Math.random() - 0.5);
+            setWords(shuffled as { word: string; definition: string; forgot: boolean }[]);
         };
         fetchData();
     }, []);
@@ -42,11 +43,11 @@ export default function Home() {
 
     return (
         <>
-            <div className={`absolute z-40 max-w-lg w-full h-[70px] flex justify-end items-center px-10 bg-transparent ${isList ? "text-primary" : ""}`}>
-                <TbArrowsExchange size={32} className="cursor-pointer" onClick={() => setIsList((prev) => !prev)}></TbArrowsExchange>
+            <div className={`absolute z-40 max-w-lg w-full h-[50px] flex justify-end items-center px-10 bg-transparent ${isList ? "text-primary" : ""}`}>
+                <TbArrowsExchange size={24} className="cursor-pointer" onClick={() => setIsList((prev) => !prev)}></TbArrowsExchange>
             </div>
             {isList !== true ? (
-                <div className="max-w-md w-full h-full flex flex-col  px-10 justify-center gap-10">
+                <div className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
                     {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
@@ -55,7 +56,7 @@ export default function Home() {
                             variant="outline"
                             onClick={() => {
                                 setAsForgot(param.cards as string, index, words);
-                                incrementIndex();
+                                if (next !== false) incrementIndex();
                             }}
                         >
                             <MdThumbDown size={24}></MdThumbDown>
@@ -65,8 +66,8 @@ export default function Home() {
                             className="max-w-[50%] w-full h-full gap-3 items-center"
                             variant="outline"
                             onClick={() => {
-                                setAsLearn(param.cards as string, index, words);
-                                incrementIndex();
+                                setAsForgot(param.cards as string, index, words);
+                                if (next !== false) incrementIndex();
                             }}
                         >
                             know
@@ -74,7 +75,7 @@ export default function Home() {
                         </Button>
                     </div>
 
-                    <div className=" flex justify-between items-center gap-5">
+                    <div className=" flex justify-between h-[100px] items-center gap-5">
                         <Button variant="outline" onClick={back !== false ? decrementIndex : () => {}} className={back !== false ? "" : "opacity-[0.1]"}>
                             <MdNavigateBefore size={32}></MdNavigateBefore>
                         </Button>
