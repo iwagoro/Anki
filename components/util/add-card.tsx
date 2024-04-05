@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { makePreset, getPresets, addWordFromCSV } from "@/components/util/data-util";
+import { P } from "@/components/util/typography";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const readCSV = async (file: any) => {
+const readCSVFile = async (file: any) => {
     return new Promise((resolve, reject) => {
         if (file) {
             const reader = new FileReader();
@@ -23,6 +24,7 @@ const readCSV = async (file: any) => {
 
 export const AddCard = () => {
     const [file, setFile] = useState({});
+    const [csv, setCSV] = useState("");
     const [presetName, setPresetName] = useState("");
     return (
         <Card>
@@ -43,6 +45,23 @@ export const AddCard = () => {
                         }}
                     ></Input>
                 </div>
+
+                <div className="w-full flex justify-center">
+                    <P>or</P>
+                </div>
+
+                <div className="w-full">
+                    <Label className="w-full">Paste CSV here</Label>
+                    <Input
+                        type="text"
+                        className="w-full"
+                        onChange={(e) => {
+                            if (e.target.value !== null) {
+                                setCSV(e.target.value);
+                            }
+                        }}
+                    ></Input>
+                </div>
                 <div className="w-full">
                     <Label className="w-full">Enter preset name</Label>
                     <Input
@@ -52,17 +71,22 @@ export const AddCard = () => {
                         }}
                     ></Input>
                 </div>
+
                 <Button
                     onClick={() => {
                         if (presetName !== "") {
-                            readCSV(file)
-                                .then((csvData) => {
-                                    console.log(csvData); // 適切なCSVデータがログに表示されるはず
-                                    addWordFromCSV(csvData as string, presetName);
-                                })
-                                .catch((error) => {
-                                    console.error(error);
-                                });
+                            if (file) {
+                                readCSVFile(file)
+                                    .then((csvData) => {
+                                        console.log(csvData); // 適切なCSVデータがログに表示されるはず
+                                        addWordFromCSV(csvData as string, presetName);
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                    });
+                            } else if (csv !== "") {
+                                addWordFromCSV(csv, presetName);
+                            }
                         }
                     }}
                     className={presetName !== "" ? "" : "opacity-[0.1]"}
