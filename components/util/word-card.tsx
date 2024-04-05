@@ -8,14 +8,18 @@ import { Button } from "@/components/ui/button";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { setAsForgot, setAsLearn } from "@/components/util/data-util";
 
-export const WordCard1 = ({ word, definition, forgot }: { word: string; definition: string; forgot?: boolean }) => {
+export const WordCard1 = ({ word, definition, forgot, change }: { word: string; definition: string; forgot?: boolean; change?: number }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
     const flipCard = () => {
         setIsFlipped(!isFlipped);
     };
 
-    const cardStyle = "flex flex-col items-center justify-center max-w-md w-full  h-[400px]";
+    useEffect(() => {
+        setIsFlipped(false);
+    }, [change]);
+
+    const cardStyle = "flex flex-col items-center justify-center max-w-md w-full p-10  h-[400px]";
 
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">

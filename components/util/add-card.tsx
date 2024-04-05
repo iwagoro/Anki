@@ -52,15 +52,14 @@ export const AddCard = () => {
 
                 <div className="w-full">
                     <Label className="w-full">Paste CSV here</Label>
-                    <Input
-                        type="text"
+                    <textarea
                         className="w-full"
                         onChange={(e) => {
                             if (e.target.value !== null) {
                                 setCSV(e.target.value);
                             }
                         }}
-                    ></Input>
+                    ></textarea>
                 </div>
                 <div className="w-full">
                     <Label className="w-full">Enter preset name</Label>
@@ -75,7 +74,7 @@ export const AddCard = () => {
                 <Button
                     onClick={() => {
                         if (presetName !== "") {
-                            if (file) {
+                            if (Object.keys(file).length !== 0) {
                                 readCSVFile(file)
                                     .then((csvData) => {
                                         console.log(csvData); // 適切なCSVデータがログに表示されるはず
@@ -85,6 +84,7 @@ export const AddCard = () => {
                                         console.error(error);
                                     });
                             } else if (csv !== "") {
+                                console.log(csv);
                                 addWordFromCSV(csv, presetName);
                             }
                         }
