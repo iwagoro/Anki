@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { useSwipeable } from "react-swipeable";
-import { AppContext } from "../Provider";
+import { AppContext } from "../../components/util/provider";
 import { useContext } from "react";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);

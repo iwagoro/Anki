@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useState } from "react";
 import { TbArrowsExchange } from "react-icons/tb";
-import { AppContext } from "@/app/Provider";
+import { AppContext } from "@/components/util/provider";
 import { useContext } from "react";
 
 export const TopBar = () => {
