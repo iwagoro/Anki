@@ -63,7 +63,7 @@ export default function Home() {
             {isList !== true ? (
                 <div className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {words[index] && <WordCard1 {...handlers} word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"
