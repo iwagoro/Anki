@@ -11,10 +11,31 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import Link from "next/link";
+import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from "recharts";
+import { H3 } from "./typography";
 
 export const PresetCard = ({ name, description, length, known }: { name: string; description: string; length: number; known: number }) => {
     const [isExisted, setIsExisted] = useState(true);
     const [csv, setCSV] = useState("");
+    const data = [
+        {
+            name: "A",
+            x: length,
+            fill: "#96908D",
+        },
+        {
+            name: "B",
+            x: known,
+            fill: "#f97316",
+        },
+    ];
+
+    const style = {
+        top: "50%",
+        right: 0,
+        transform: "translate(0, -50%)",
+        lineHeight: "24px",
+    };
     return (
         <div className={`w-full md:w-[45%] ${isExisted === true ? " " : " hidden"}`}>
             <Card>
@@ -24,7 +45,12 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                         <CardDescription>last seen :{description}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center gap-3">
-                        <Gauge width={240} height={240} value={(known * 100) / length} text={`${known} / ${length}`} />
+                        <RadialBarChart width={240} height={240} data={data} innerRadius="60%" outerRadius="100%">
+                            <RadialBar dataKey="x" />
+                            <text x={120} y={120} textAnchor="middle" dominantBaseline="middle" className="text-2xl font-semibold" style={{ fill: "#96908d" }}>
+                                {known}/{length}
+                            </text>
+                        </RadialBarChart>
                     </CardContent>
                 </Link>
                 <CardFooter>

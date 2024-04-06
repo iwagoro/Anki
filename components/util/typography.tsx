@@ -17,3 +17,7 @@ export const H4 = ({ children }: { children: React.ReactNode }) => {
 export const P = ({ children }: { children: React.ReactNode }) => {
     return <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>;
 };
+
+export const Large = ({ children }: { children: React.ReactNode }) => {
+    return <div className="text-lg font-medium">{children}</div>;
+};

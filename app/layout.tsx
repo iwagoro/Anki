@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { TopBar } from "@/components/util/top-bar";
 import "./globals.css";
 import { Provider } from "../components/util/provider";
+import { ThemeProvider } from "@/components/util/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +22,10 @@ export default function RootLayout({
             <body className={inter.className + " " + "w-screen h-screen flex justify-center overflow-hidden "}>
                 <div className=" max-w-2xl w-full min-h-screen bg-background  flex justify-center">
                     <Provider>
-                        <TopBar></TopBar>
-                        {children}
+                        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                            <TopBar></TopBar>
+                            {children}
+                        </ThemeProvider>
                     </Provider>
                 </div>
             </body>
