@@ -19,6 +19,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <link rel="manifest" href="/manifest.json" />
+                <link rel="apple-touch-icon" href="/icon.png"></link>
+                <meta name="theme-color" content="#f91376" />
+            </head>
             <body className={inter.className + " " + "w-screen h-screen flex justify-center overflow-hidden "}>
                 <div className=" max-w-2xl w-full min-h-screen bg-background  flex justify-center">
                     <Provider>
