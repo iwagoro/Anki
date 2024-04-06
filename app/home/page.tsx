@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PresetCard } from "@/components/util/preset-card";
-import { makePreset, getPresets, addWordFromCSV } from "@/components/util/data-util";
+import { getPresets, addWordFromCSV } from "@/components/util/data-util";
 import { AddCard } from "@/components/util/add-card";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Home() {
     const [presets, setPresets] = useState([]);
@@ -23,6 +24,7 @@ export default function Home() {
                 ))}
                 <div className="flex-1 min-w-[240px]"></div>
             </div>
+            <Toaster></Toaster>
         </div>
     );
 }

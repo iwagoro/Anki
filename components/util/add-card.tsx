@@ -3,9 +3,11 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { makePreset, getPresets, addWordFromCSV } from "@/components/util/data-util";
+import { getPresets, addWordFromCSV } from "@/components/util/data-util";
 import { P } from "@/components/util/typography";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { toast } from "sonner";
 
 const readCSVFile = async (file: any) => {
     return new Promise((resolve, reject) => {
@@ -53,7 +55,7 @@ export const AddCard = () => {
                 <div className="w-full">
                     <Label className="w-full">Paste CSV here</Label>
                     <textarea
-                        className="w-full"
+                        className="w-full border border-border"
                         onChange={(e) => {
                             if (e.target.value !== null) {
                                 setCSV(e.target.value);
@@ -79,6 +81,8 @@ export const AddCard = () => {
                                     .then((csvData) => {
                                         console.log(csvData); // 適切なCSVデータがログに表示されるはず
                                         addWordFromCSV(csvData as string, presetName);
+                                        const date = format(new Date(), "yyyy-MM-dd");
+                                        toast(name + "was added sucessfully", { description: date });
                                     })
                                     .catch((error) => {
                                         console.error(error);
@@ -86,6 +90,9 @@ export const AddCard = () => {
                             } else if (csv !== "") {
                                 console.log(csv);
                                 addWordFromCSV(csv, presetName);
+
+                                const date = format(new Date(), "yyyy-MM-dd");
+                                toast(name + "was added sucessfully", { description: date });
                             }
                         }
                     }}

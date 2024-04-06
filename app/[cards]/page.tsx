@@ -7,14 +7,15 @@ import { useParams } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
-import { TbArrowsExchange } from "react-icons/tb";
 import { useSwipeable } from "react-swipeable";
+import { AppContext } from "../Provider";
+import { useContext } from "react";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
-    const [isList, setIsList] = useState(false); // [cards] is a list of cards, so we need to check if it is a list or not
+    const { isList } = useContext(AppContext);
     const param = useParams();
     const handlers = useSwipeable({
         onSwiped: (event) => {
@@ -57,13 +58,11 @@ export default function Home() {
 
     return (
         <>
-            <div className={`absolute z-40 max-w-lg w-full h-[50px] flex justify-end items-center px-10 bg-transparent ${isList ? "text-primary" : ""}`}>
-                <TbArrowsExchange size={24} className="cursor-pointer" onClick={() => setIsList((prev) => !prev)}></TbArrowsExchange>
-            </div>
             {isList !== true ? (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
                     {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"

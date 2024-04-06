@@ -1,12 +1,15 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { H2, H3, P } from "@/components/util/typography";
 import ReactCardFlip from "react-card-flip";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
-import { setAsForgot, setAsLearn } from "@/components/util/data-util";
+import { setAsForgot, setAsLearn, deleteWord, editWord } from "@/components/util/data-util";
+
+import { MdDelete, MdEdit } from "react-icons/md";
+import { set } from "date-fns";
 
 export const WordCard1 = ({ word, definition, forgot, change }: { word: string; definition: string; forgot?: boolean; change?: number }) => {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -24,13 +27,15 @@ export const WordCard1 = ({ word, definition, forgot, change }: { word: string; 
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
             <div className="flex justify-center box-border ">
-                <Card className={forgot === true ? "bg-red-100" + " " + cardStyle : cardStyle} onClick={flipCard}>
+                <Card className={forgot === true ? "border-primary" + " " + cardStyle : cardStyle} onClick={flipCard}>
                     <H2>{word}</H2>
                 </Card>
             </div>
             <div className="flex justify-center box-border ">
-                <Card className={forgot === true ? "bg-red-100" + " " + cardStyle : cardStyle} onClick={flipCard}>
-                    <P>{definition}</P>
+                <Card className={forgot === true ? "border-primary" + " " + cardStyle : cardStyle} onClick={flipCard}>
+                    <CardContent>
+                        <P>{definition}</P>
+                    </CardContent>
                 </Card>
             </div>
         </ReactCardFlip>
@@ -39,10 +44,11 @@ export const WordCard1 = ({ word, definition, forgot, change }: { word: string; 
 
 export const WordCard2 = ({ preset, words }: Readonly<{ preset: string; words: { word: string; definition: string; forgot: boolean }[] }>) => {
     const [forgotIndex, setForgotIndex] = useState<number[]>([]);
+    const [deletedIndex, setDeletedIndex] = useState<number[]>([]);
     return (
         <>
             {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
-                <Card key={"listed-card" + index} className={word.forgot === true || forgotIndex.includes(index) ? "bg-red-100" : ""}>
+                <Card key={"listed-card" + index} className={`${word.forgot === true || forgotIndex.includes(index) ? "border-primary" : ""} ${deletedIndex.includes(index) ? "hidden" : ""}`}>
                     <CardHeader>
                         <CardTitle>{word.word}</CardTitle>
                         <CardDescription>{word.definition}</CardDescription>
@@ -50,29 +56,48 @@ export const WordCard2 = ({ preset, words }: Readonly<{ preset: string; words: {
                     <CardContent>
                         <div className="w-full h-auto flex items-center">
                             <Button
-                                className=" w-[300px] h-auto gap-3 items-center"
+                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border mr-3"
                                 variant="outline"
                                 onClick={() => {
                                     setAsForgot(preset, index, words);
                                     setForgotIndex((prev) => [...prev, index]);
                                 }}
                             >
-                                <MdThumbDown size={24}></MdThumbDown>
-                                don't know
+                                <MdThumbDown></MdThumbDown>
                             </Button>
                             <Button
-                                className=" w-[300px] h-auto gap-3 items-center"
+                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border ml-3"
                                 variant="outline"
                                 onClick={() => {
                                     setAsLearn(preset, index, words);
                                     setForgotIndex((prev) => prev.filter((i) => i !== index));
                                 }}
                             >
-                                know
-                                <MdThumbUp size={24}></MdThumbUp>
+                                <MdThumbUp></MdThumbUp>
                             </Button>
                         </div>
                     </CardContent>
+                    <CardFooter>
+                        <div className="w-full flex items-center justify-start gap-2">
+                            {/* <Button
+                                variant="outline"
+                                onClick={async () => {
+                                    deleteWord(preset, index, words);
+                                }}
+                            >
+                                <MdEdit></MdEdit>
+                            </Button> */}
+                            <Button
+                                variant="outline"
+                                onClick={async () => {
+                                    deleteWord(preset, index, words);
+                                    setDeletedIndex((prev) => [...prev, index]);
+                                }}
+                            >
+                                <MdDelete></MdDelete>
+                            </Button>
+                        </div>
+                    </CardFooter>
                 </Card>
             ))}
         </>
