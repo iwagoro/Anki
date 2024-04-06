@@ -17,14 +17,17 @@ const AppContext = createContext(
         setIsList: React.Dispatch<React.SetStateAction<boolean>>;
         presets: preset[];
         setPresets: React.Dispatch<React.SetStateAction<preset[]>>;
+        user: string;
+        setUser: React.Dispatch<React.SetStateAction<string>>;
     }
 );
 const Provider = ({ children }: { children: React.ReactNode }) => {
     const [isList, setIsList] = useState<boolean>(false);
     const [presets, setPresets] = useState<preset[]>([]);
+    const [user, setUser] = useState<string>("test");
 
     // AppContext に setPresets も含める
-    const contextValue = { isList, setIsList, presets, setPresets };
+    const contextValue = { isList, setIsList, presets, setPresets, user, setUser };
     return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };
 

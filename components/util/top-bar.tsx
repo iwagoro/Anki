@@ -6,11 +6,12 @@ import { useState } from "react";
 import { TbArrowsExchange } from "react-icons/tb";
 import { AppContext } from "@/components/util/provider";
 import { useContext } from "react";
+import { Input } from "../ui/input";
 
 export const TopBar = () => {
     const { isList, setIsList } = useContext(AppContext);
     return (
-        <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10 bg-transparent">
+        <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-transparent">
             <Link href="/home">
                 <div className="flex gap-4 items-center bg-transparent">
                     <svg width="24" height="24" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +29,7 @@ export const TopBar = () => {
                     <h2 className="scroll-m-20  text-[24px] font-semibold tracking-tight first:mt-0">Anki</h2>
                 </div>
             </Link>
-
+            <Input type="text" placeholder="full-text searching is not available" className="h-8" onChange={() => {}}></Input>
             <div className={` bg-transparent ${isList ? "text-primary" : ""}`}>
                 <TbArrowsExchange size={24} className="cursor-pointer" onClick={() => setIsList((prev: boolean) => !prev)}></TbArrowsExchange>
             </div>
