@@ -7,14 +7,14 @@ import { TbArrowsExchange } from "react-icons/tb";
 import { AppContext } from "@/components/util/provider";
 import { useContext } from "react";
 import { Input } from "../ui/input";
-import { IoSunnyOutline } from "react-icons/io5";
+import { MdBrightness5, MdBrightness2, MdOutlineAutoAwesome } from "react-icons/md";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { MdMenu } from "react-icons/md";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
-    const { isList, setIsList } = useContext(AppContext);
+    const { isList, setIsList, isFocused, setIsFocused } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
     return (
         <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-transparent">
@@ -51,19 +51,23 @@ export const TopBar = () => {
                         <SheetDescription className="text-left">Currently the only user is a test user. We plan to implement authentication with a Google account sometime in the future.</SheetDescription>
                     </SheetHeader>
                     <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border">
-                        <div className={`flex gap-5 bg-transparent ${isList ? "text-primary" : ""}`} onClick={() => setIsList((prev: boolean) => !prev)}>
-                            <TbArrowsExchange size={24} className="cursor-pointer"></TbArrowsExchange>
-                            <Large>Left Mode</Large>
+                        <div className={`flex gap-5 bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`} onClick={() => setIsList((prev: boolean) => !prev)}>
+                            <TbArrowsExchange size={24}></TbArrowsExchange>
+                            <Large>List Mode</Large>
                         </div>
                         <div
-                            className={`flex gap-5 bg-transparent ${theme === "dark" ? "text-white" : "text-black"}`}
+                            className={`flex gap-5 bg-transparent curosr-pointer  ${theme === "dark" ? "text-white" : "text-black"}`}
                             onClick={() => {
                                 setTheme(theme === "dark" ? "light" : "dark");
                             }}
                         >
-                            <IoSunnyOutline size={24} className="cursor-pointer"></IoSunnyOutline>
+                            {theme === "dark" ? <MdBrightness5 size={24} /> : <MdBrightness2 size={24} />}
                             <Large>Change Color</Large>
                         </div>
+                        {/* <div className={`flex gap-5 bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`} onClick={() => setIsFocused((prev: boolean) => !prev)}>
+                            <MdOutlineAutoAwesome size={24}></MdOutlineAutoAwesome>
+                            <Large>Focus on don't know</Large>
+                        </div> */}
                     </div>
 
                     {/* <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border"></div> */}

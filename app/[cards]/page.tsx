@@ -12,10 +12,11 @@ import { AppContext } from "../../components/util/provider";
 import { useContext } from "react";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
+    const [focusWord, setFocusWord] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
-    const { isList } = useContext(AppContext);
+    const { isList, isFocused } = useContext(AppContext);
     const param = useParams();
     const handlers = useSwipeable({
         onSwiped: (event) => {
@@ -40,6 +41,16 @@ export default function Home() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const reducedWords: Array<{ word: string; definition: string; forgot: boolean }> = [];
+        words.map((word) => {
+            if (word.forgot === false) {
+                reducedWords.push(word);
+            }
+        });
+        setFocusWord(reducedWords);
+    }, [words]);
+
     const incrementIndex = () => {
         setIndex((index) => index + 1);
     };
@@ -49,19 +60,35 @@ export default function Home() {
     };
 
     useEffect(() => {
-        if (words[index + 1] === undefined) setNext(false);
-        else setNext(true);
+        if (isFocused) {
+            if (focusWord[index + 1] === undefined) setNext(false);
+            else setNext(true);
 
-        if (words[index - 1] === undefined) setBack(false);
-        else setBack(true);
+            if (focusWord[index - 1] === undefined) setBack(false);
+            else setBack(true);
+        } else {
+            if (words[index + 1] === undefined) setNext(false);
+            else setNext(true);
+
+            if (words[index - 1] === undefined) setBack(false);
+            else setBack(true);
+        }
     }, [words, index]);
+
+    useEffect(() => {
+        if (!isFocused) {
+            if (words[index] === undefined) {
+                setIndex(0);
+            }
+        }
+    }, [isFocused]);
 
     return (
         <>
             {isList !== true ? (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {isFocused ? focusWord[index] && <WordCard1 word={focusWord[index].word} definition={focusWord[index].definition} forgot={focusWord[index].forgot} change={index}></WordCard1> : words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
 
                     <div className="w-full h-[100px] flex items-center">
                         <Button

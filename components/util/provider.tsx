@@ -19,15 +19,18 @@ const AppContext = createContext(
         setPresets: React.Dispatch<React.SetStateAction<preset[]>>;
         user: string;
         setUser: React.Dispatch<React.SetStateAction<string>>;
+        isFocused: boolean;
+        setIsFocused: React.Dispatch<React.SetStateAction<boolean>>;
     }
 );
 const Provider = ({ children }: { children: React.ReactNode }) => {
     const [isList, setIsList] = useState<boolean>(false);
     const [presets, setPresets] = useState<preset[]>([]);
     const [user, setUser] = useState<string>("test");
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     // AppContext に setPresets も含める
-    const contextValue = { isList, setIsList, presets, setPresets, user, setUser };
+    const contextValue = { isList, setIsList, presets, setPresets, user, setUser, isFocused, setIsFocused };
     return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };
 

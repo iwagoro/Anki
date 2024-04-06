@@ -34,7 +34,7 @@ export const AddCard = () => {
             <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                     <AccordionTrigger className="p-6 flex items-center">
-                        <div className="flex flex-col items-start gap-2">
+                        <div className="flex flex-col items-start gap-2 text-left">
                             <CardTitle>Add words from CSV</CardTitle>
                             <CardDescription>currently, the CSV file should have the following columns: word, definition</CardDescription>
                         </div>
