@@ -10,9 +10,9 @@ import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { useSwipeable } from "react-swipeable";
 import { AppContext } from "../../components/util/provider";
 import { useContext } from "react";
+import { DataTable } from "@/components/util/database";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
-    const [focusWord, setFocusWord] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
@@ -41,16 +41,6 @@ export default function Home() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const reducedWords: Array<{ word: string; definition: string; forgot: boolean }> = [];
-        words.map((word) => {
-            if (word.forgot === false) {
-                reducedWords.push(word);
-            }
-        });
-        setFocusWord(reducedWords);
-    }, [words]);
-
     const incrementIndex = () => {
         setIndex((index) => index + 1);
     };
@@ -60,35 +50,24 @@ export default function Home() {
     };
 
     useEffect(() => {
-        if (isFocused) {
-            if (focusWord[index + 1] === undefined) setNext(false);
-            else setNext(true);
+        if (words[index + 1] === undefined) setNext(false);
+        else setNext(true);
 
-            if (focusWord[index - 1] === undefined) setBack(false);
-            else setBack(true);
-        } else {
-            if (words[index + 1] === undefined) setNext(false);
-            else setNext(true);
-
-            if (words[index - 1] === undefined) setBack(false);
-            else setBack(true);
-        }
+        if (words[index - 1] === undefined) setBack(false);
+        else setBack(true);
     }, [words, index]);
-
-    useEffect(() => {
-        if (!isFocused) {
-            if (words[index] === undefined) {
-                setIndex(0);
-            }
-        }
-    }, [isFocused]);
 
     return (
         <>
-            {isList !== true ? (
+            {isList && (
+                <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll">
+                    <WordCard2 preset={param.cards as string} words={words}></WordCard2>
+                </div>
+            )}
+            {!isList && !isFocused && (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {isFocused ? focusWord[index] && <WordCard1 word={focusWord[index].word} definition={focusWord[index].definition} forgot={focusWord[index].forgot} change={index}></WordCard1> : words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
 
                     <div className="w-full h-[100px] flex items-center">
                         <Button
@@ -125,11 +104,8 @@ export default function Home() {
                         </Button>
                     </div>
                 </div>
-            ) : (
-                <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll">
-                    <WordCard2 preset={param.cards as string} words={words}></WordCard2>
-                </div>
             )}
+            {isFocused && <DataTable words={words}></DataTable>}
         </>
     );
 }

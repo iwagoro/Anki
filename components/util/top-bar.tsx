@@ -11,6 +11,7 @@ import { MdBrightness5, MdBrightness2, MdOutlineAutoAwesome } from "react-icons/
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { MdMenu } from "react-icons/md";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { VscLayoutMenubar } from "react-icons/vsc";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
@@ -51,12 +52,18 @@ export const TopBar = () => {
                         <SheetDescription className="text-left">Currently the only user is a test user. We plan to implement authentication with a Google account sometime in the future.</SheetDescription>
                     </SheetHeader>
                     <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border">
-                        <div className={`flex gap-5 bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`} onClick={() => setIsList((prev: boolean) => !prev)}>
+                        <div
+                            className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`}
+                            onClick={() => {
+                                setIsList((prev: boolean) => !prev);
+                                setIsFocused(false);
+                            }}
+                        >
                             <TbArrowsExchange size={24}></TbArrowsExchange>
                             <Large>List Mode</Large>
                         </div>
                         <div
-                            className={`flex gap-5 bg-transparent curosr-pointer  ${theme === "dark" ? "text-white" : "text-black"}`}
+                            className={`flex gap-5 items-center  bg-transparent curosr-pointer  ${theme === "dark" ? "text-white" : "text-black"}`}
                             onClick={() => {
                                 setTheme(theme === "dark" ? "light" : "dark");
                             }}
@@ -68,6 +75,16 @@ export const TopBar = () => {
                             <MdOutlineAutoAwesome size={24}></MdOutlineAutoAwesome>
                             <Large>Focus on don't know</Large>
                         </div> */}
+                        <div
+                            className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`}
+                            onClick={() => {
+                                setIsFocused((prev: boolean) => !prev);
+                                setIsList(false);
+                            }}
+                        >
+                            <VscLayoutMenubar size={24}></VscLayoutMenubar>
+                            <Large>Database Mode</Large>
+                        </div>
                     </div>
 
                     {/* <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border"></div> */}
