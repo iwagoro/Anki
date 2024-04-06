@@ -2,12 +2,13 @@
 import { WordCard1, WordCard2 } from "@/components/util/word-card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { getWords, setAsForgot, setAsLearn } from "@/components/util/data-util";
+import { getWords, setAsForgot, setAsLearn, updateDate } from "@/components/util/data-util";
 import { useParams } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { TbArrowsExchange } from "react-icons/tb";
+import { useSwipeable } from "react-swipeable";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
@@ -15,12 +16,25 @@ export default function Home() {
     const [back, setBack] = useState(false);
     const [isList, setIsList] = useState(false); // [cards] is a list of cards, so we need to check if it is a list or not
     const param = useParams();
+    const handlers = useSwipeable({
+        onSwiped: (event) => {
+            console.log(event);
+            if (event.dir == "Left") {
+                if (back !== false) decrementIndex();
+            }
+            if (event.dir == "Right") {
+                if (next !== false) incrementIndex();
+            }
+        },
+        trackMouse: true, //マウス操作でのスワイプを許可する場合はtrue
+    });
 
     useEffect(() => {
         const fetchData = async () => {
             const data = await getWords(param.cards as string); // Cast param.cards to string
             const shuffled = data.sort(() => Math.random() - 0.5);
             setWords(shuffled as { word: string; definition: string; forgot: boolean }[]);
+            updateDate(param.cards as string);
         };
         fetchData();
     }, []);

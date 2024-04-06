@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { parse } from "csv-parse/sync";
 
 import { getFirestore, setDoc } from "firebase/firestore";
+import { format } from "date-fns";
 import { getDocs, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 
 const db = getFirestore(app);
@@ -72,4 +73,12 @@ export const setAsLearn = async (preset: string, index: number, words: any) => {
     });
 
     updateDoc(docRef, { words: words, known: cnt });
+};
+
+export const updateDate = async (preset: string) => {
+    const docRef = doc(db, "user", "test", "presets", preset);
+    const date = format(new Date(), "yyyy-MM-dd");
+
+    console.log(date);
+    await updateDoc(docRef, { description: "last seen :" + date });
 };
