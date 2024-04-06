@@ -9,7 +9,6 @@ import { MdThumbDown, MdThumbUp } from "react-icons/md";
 import { setAsForgot, setAsLearn, deleteWord, editWord } from "@/components/util/data-util";
 
 import { MdDelete, MdEdit } from "react-icons/md";
-import { set } from "date-fns";
 
 export const WordCard1 = ({ word, definition, forgot, change }: { word: string; definition: string; forgot?: boolean; change?: number }) => {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -33,7 +32,7 @@ export const WordCard1 = ({ word, definition, forgot, change }: { word: string; 
             </div>
             <div className="flex justify-center box-border ">
                 <Card className={forgot === true ? "border-primary" + " " + cardStyle : cardStyle} onClick={flipCard}>
-                    <CardContent>
+                    <CardContent className={isFlipped === false ? "hidden" : ""}>
                         <P>{definition}</P>
                     </CardContent>
                 </Card>
