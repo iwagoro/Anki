@@ -11,12 +11,14 @@ import { useSwipeable } from "react-swipeable";
 import { AppContext } from "../../components/util/provider";
 import { useContext } from "react";
 import { DataTable } from "@/components/util/database";
+import { set } from "date-fns";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
     const { isList, isFocused } = useContext(AppContext);
+    const [show, setShow] = useState(false);
     const param = useParams();
     const handlers = useSwipeable({
         onSwiped: (event) => {
@@ -42,10 +44,12 @@ export default function Home() {
     }, []);
 
     const incrementIndex = () => {
+        setShow(false);
         setIndex((index) => index + 1);
     };
 
     const decrementIndex = () => {
+        setShow(false);
         setIndex((index) => index - 1);
     };
 
@@ -57,6 +61,10 @@ export default function Home() {
         else setBack(true);
     }, [words, index]);
 
+    useEffect(() => {
+        setShow(true);
+    }, [index]);
+
     return (
         <>
             {isList && (
@@ -67,8 +75,8 @@ export default function Home() {
             {!isList && !isFocused && (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
-
+                    {show && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {!show && <WordCard1 word="" definition="" forgot={words[index].forgot} change={index}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"
