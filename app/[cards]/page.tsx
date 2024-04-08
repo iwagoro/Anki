@@ -14,10 +14,11 @@ import { DataTable } from "@/components/util/database";
 import { set } from "date-fns";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
+    const [hateWords, setHateWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
-    const { isList, isFocused } = useContext(AppContext);
+    const { isList, isFocused, isHate } = useContext(AppContext);
     const [show, setShow] = useState(false);
     const param = useParams();
     const handlers = useSwipeable({
@@ -38,6 +39,8 @@ export default function Home() {
             const data = await getWords(param.cards as string); // Cast param.cards to string
             const shuffled = data.sort(() => Math.random() - 0.5);
             setWords(shuffled as { word: string; definition: string; forgot: boolean }[]);
+            const hate = data.filter((word: any) => word.forgot === true);
+            setHateWords(hate);
             updateDate(param.cards as string);
         };
         fetchData();
@@ -69,13 +72,15 @@ export default function Home() {
         <>
             {isList && (
                 <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll">
-                    <WordCard2 preset={param.cards as string} words={words}></WordCard2>
+                    {!isHate && <WordCard2 preset={param.cards as string} words={words}></WordCard2>}
+                    {isHate && <WordCard2 preset={param.cards as string} words={hateWords}></WordCard2>}
                 </div>
             )}
             {!isList && !isFocused && (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={((index + 1) * 100) / words.length}></Progress>
-                    {show && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {show && !isHate && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                    {show && isHate && hateWords[index] && <WordCard1 word={hateWords[index].word} definition={hateWords[index].definition} forgot={hateWords[index].forgot} change={index}></WordCard1>}
                     {!show && <WordCard1 word="" definition="" forgot={false} change={index}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
