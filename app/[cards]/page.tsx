@@ -113,7 +113,8 @@ export default function Home() {
                                 if (!isHate) {
                                     setAsForgot(param.cards as string, index, words);
                                 } else {
-                                    setAsForgot(param.cards as string, index2, hateWords);
+                                    const fixedIndex = words.findIndex((word) => word.word === hateWords[index2].word);
+                                    setAsForgot(param.cards as string, fixedIndex, words);
                                 }
                                 if (next !== false) incrementIndex();
                             }}
