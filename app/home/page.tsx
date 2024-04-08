@@ -16,7 +16,7 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="py-[70px] w-full h-full px-10   overflow-scroll ">
+        <div className="py-[70px] w-full h-full px-10   overflow-scroll hidden-scrollbar">
             <AddCard></AddCard>
             <div className="mt-10 gap-10 flex flex-wrap justify-between">
                 {presets.map((preset: { name: string; description: string; length: number; known: number }) => (

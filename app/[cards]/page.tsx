@@ -107,7 +107,7 @@ export default function Home() {
     return (
         <>
             {isList && (
-                <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll">
+                <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll hidden-scrollbar">
                     {!isHate && <WordCard2 preset={param.cards as string} words={words}></WordCard2>}
                     {isHate && <WordCard2 preset={param.cards as string} words={hateWords}></WordCard2>}
                 </div>
