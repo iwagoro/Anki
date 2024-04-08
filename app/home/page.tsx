@@ -7,13 +7,13 @@ import { Toaster } from "@/components/ui/sonner";
 
 export default function Home() {
     const [presets, setPresets] = useState([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getPresets();
-            setPresets(data as []);
-        };
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const data = await getPresets();
+    //         setPresets(data as []);
+    //     };
+    //     fetchData();
+    // }, []);
 
     return (
         <div className="py-[70px] w-full h-full px-10   overflow-scroll ">
