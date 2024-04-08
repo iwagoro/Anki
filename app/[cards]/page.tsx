@@ -11,15 +11,19 @@ import { useSwipeable } from "react-swipeable";
 import { AppContext } from "../../components/util/provider";
 import { useContext } from "react";
 import { DataTable } from "@/components/util/database";
-import { set } from "date-fns";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [hateWords, setHateWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
+    const [quitCount, setQuitCount] = useState(0);
+    const [index2, setIndex2] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
     const { isList, isFocused, isHate } = useContext(AppContext);
     const [show, setShow] = useState(false);
+    const router = useRouter();
     const param = useParams();
     const handlers = useSwipeable({
         onSwiped: (event) => {
@@ -44,29 +48,48 @@ export default function Home() {
             updateDate(param.cards as string);
         };
         fetchData();
+        setQuitCount(0);
     }, []);
 
     const incrementIndex = () => {
-        setShow(false);
-        setIndex((index) => index + 1);
+        if (!isHate) {
+            setShow(false);
+            setIndex((index) => index + 1);
+        } else {
+            setShow(false);
+            setIndex2((index2) => index2 + 1);
+        }
     };
 
     const decrementIndex = () => {
-        setShow(false);
-        setIndex((index) => index - 1);
+        if (!isHate) {
+            setShow(false);
+            setIndex((index) => index - 1);
+        } else {
+            setShow(false);
+            setIndex2((index2) => index2 - 1);
+        }
     };
 
     useEffect(() => {
-        if (words[index + 1] === undefined) setNext(false);
-        else setNext(true);
+        if (!isHate) {
+            if (words[index + 1] === undefined) setNext(false);
+            else setNext(true);
 
-        if (words[index - 1] === undefined) setBack(false);
-        else setBack(true);
-    }, [words, index]);
+            if (words[index - 1] === undefined) setBack(false);
+            else setBack(true);
+        } else {
+            if (hateWords[index2 + 1] === undefined) setNext(false);
+            else setNext(true);
+
+            if (hateWords[index2 - 1] === undefined) setBack(false);
+            else setBack(true);
+        }
+    }, [words, index, index2, isHate]);
 
     useEffect(() => {
         setShow(true);
-    }, [index]);
+    }, [index, index2, isHate]);
 
     return (
         <>
@@ -78,16 +101,20 @@ export default function Home() {
             )}
             {!isList && !isFocused && (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
-                    <Progress value={((index + 1) * 100) / words.length}></Progress>
+                    <Progress value={!isHate ? ((index + 1) * 100) / words.length : ((index2 + 1) * 100) / hateWords.length}></Progress>
                     {show && !isHate && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
-                    {show && isHate && hateWords[index] && <WordCard1 word={hateWords[index].word} definition={hateWords[index].definition} forgot={hateWords[index].forgot} change={index}></WordCard1>}
+                    {show && isHate && hateWords[index2] && <WordCard1 word={hateWords[index2].word} definition={hateWords[index2].definition} forgot={hateWords[index2].forgot} change={index}></WordCard1>}
                     {!show && <WordCard1 word="" definition="" forgot={false} change={index}></WordCard1>}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"
                             variant="outline"
                             onClick={() => {
-                                setAsForgot(param.cards as string, index, words);
+                                if (!isHate) {
+                                    setAsForgot(param.cards as string, index, words);
+                                } else {
+                                    setAsForgot(param.cards as string, index2, hateWords);
+                                }
                                 if (next !== false) incrementIndex();
                             }}
                         >
@@ -98,8 +125,24 @@ export default function Home() {
                             className="max-w-[50%] w-full h-full gap-3 items-center"
                             variant="outline"
                             onClick={() => {
-                                setAsLearn(param.cards as string, index, words);
-                                if (next !== false) incrementIndex();
+                                if (!isHate) {
+                                    setAsLearn(param.cards as string, index, words);
+                                } else {
+                                    const fixedIndex = words.findIndex((word) => word.word === hateWords[index2].word);
+                                    setAsLearn(param.cards as string, fixedIndex, words);
+                                }
+                                if (next !== false) {
+                                    incrementIndex();
+                                } else {
+                                    if (quitCount === 0) {
+                                        toast("you have finished the list", { description: "you can quit by clicking the button again" });
+                                        setQuitCount(1);
+                                    } else if (quitCount === 1) {
+                                        toast("quited", { description: "you can see the list of words by clicking the list button" });
+                                        router.push("/home");
+                                        setQuitCount(0);
+                                    }
+                                }
                             }}
                         >
                             know
