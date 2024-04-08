@@ -2,7 +2,7 @@
 import { Large } from "@/components/util/typography";
 import Link from "next/link";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TbArrowsExchange } from "react-icons/tb";
 import { AppContext } from "@/components/util/provider";
 import { useContext } from "react";
@@ -13,11 +13,13 @@ import { MdMenu } from "react-icons/md";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { VscLayoutMenubar } from "react-icons/vsc";
 import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
+import { Toaster } from "../ui/sonner";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
     const { isList, setIsList, isFocused, setIsFocused, isHate, setIsHate } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
+
     return (
         <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-transparent">
             <Link href="/home">
@@ -98,6 +100,7 @@ export const TopBar = () => {
                     </div>
                 </SheetContent>
             </Sheet>
+            <Toaster></Toaster>
         </div>
     );
 };
