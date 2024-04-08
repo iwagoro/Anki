@@ -12,10 +12,11 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { MdMenu } from "react-icons/md";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { VscLayoutMenubar } from "react-icons/vsc";
+import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
-    const { isList, setIsList, isFocused, setIsFocused } = useContext(AppContext);
+    const { isList, setIsList, isFocused, setIsFocused, isHate, setIsHate } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
     return (
         <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-transparent">
@@ -85,9 +86,16 @@ export const TopBar = () => {
                             <VscLayoutMenubar size={24}></VscLayoutMenubar>
                             <Large>Database Mode</Large>
                         </div>
+                        <div
+                            className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isHate ? "text-primary" : ""}`}
+                            onClick={() => {
+                                setIsHate((prev: boolean) => !prev);
+                            }}
+                        >
+                            {isHate ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
+                            <Large>Only You don't know</Large>
+                        </div>
                     </div>
-
-                    {/* <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border"></div> */}
                 </SheetContent>
             </Sheet>
         </div>
