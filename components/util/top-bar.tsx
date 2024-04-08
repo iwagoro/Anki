@@ -13,11 +13,12 @@ import { MdMenu } from "react-icons/md";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { VscLayoutMenubar } from "react-icons/vsc";
 import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
+import { MdOutlineAutoMode } from "react-icons/md";
 import { Toaster } from "../ui/sonner";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
-    const { isList, setIsList, isFocused, setIsFocused, isHate, setIsHate } = useContext(AppContext);
+    const { isList, setIsList, isFocused, setIsFocused, isHate, setIsHate, autoPlay, setAutoPlay } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
 
     return (
@@ -96,6 +97,15 @@ export const TopBar = () => {
                         >
                             {isHate ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
                             <Large>Only You don't know</Large>
+                        </div>
+                        <div
+                            className={`flex gap-5 items-center bg-transparent cursor-pointer  ${autoPlay ? "text-primary" : ""}`}
+                            onClick={() => {
+                                setAutoPlay((prev: boolean) => !prev);
+                            }}
+                        >
+                            <MdOutlineAutoMode size={24}></MdOutlineAutoMode>
+                            <Large>Autoplay</Large>
                         </div>
                     </div>
                 </SheetContent>

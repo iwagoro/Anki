@@ -1,5 +1,5 @@
 "use client";
-import { WordCard1, WordCard2 } from "@/components/util/word-card";
+import { WordCard1, WordCard2, WordCard3 } from "@/components/util/word-card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { getWords, setAsForgot, setAsLearn, updateDate } from "@/components/util/data-util";
@@ -21,7 +21,7 @@ export default function Home() {
     const [index2, setIndex2] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
-    const { isList, isFocused, isHate } = useContext(AppContext);
+    const { isList, isFocused, isHate, autoPlay } = useContext(AppContext);
     const [show, setShow] = useState(false);
     const router = useRouter();
     const param = useParams();
@@ -50,6 +50,19 @@ export default function Home() {
         fetchData();
         setQuitCount(0);
     }, []);
+
+    useEffect(() => {
+        if (autoPlay) {
+            const interval = setInterval(() => {
+                if (next !== false) incrementIndex();
+                else {
+                    if (isHate) setIndex2(0);
+                    else setIndex(0);
+                }
+            }, 6000);
+            return () => clearInterval(interval);
+        }
+    });
 
     const incrementIndex = () => {
         if (!isHate) {
@@ -102,9 +115,19 @@ export default function Home() {
             {!isList && !isFocused && (
                 <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
                     <Progress value={!isHate ? ((index + 1) * 100) / words.length : ((index2 + 1) * 100) / hateWords.length}></Progress>
-                    {show && !isHate && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
-                    {show && isHate && hateWords[index2] && <WordCard1 word={hateWords[index2].word} definition={hateWords[index2].definition} forgot={hateWords[index2].forgot} change={index}></WordCard1>}
-                    {!show && <WordCard1 word="" definition="" forgot={false} change={index}></WordCard1>}
+                    {!autoPlay ? (
+                        <>
+                            {show && !isHate && words[index] && <WordCard1 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard1>}
+                            {show && isHate && hateWords[index2] && <WordCard1 word={hateWords[index2].word} definition={hateWords[index2].definition} forgot={hateWords[index2].forgot} change={index}></WordCard1>}
+                            {!show && <WordCard1 word="" definition="" forgot={false} change={index}></WordCard1>}
+                        </>
+                    ) : (
+                        <>
+                            {show && !isHate && words[index] && <WordCard3 word={words[index].word} definition={words[index].definition} forgot={words[index].forgot} change={index}></WordCard3>}
+                            {show && isHate && hateWords[index2] && <WordCard3 word={hateWords[index2].word} definition={hateWords[index2].definition} forgot={hateWords[index2].forgot} change={index}></WordCard3>}
+                            {!show && <WordCard3 word="" definition="" forgot={false} change={index}></WordCard3>}
+                        </>
+                    )}
                     <div className="w-full h-[100px] flex items-center">
                         <Button
                             className="max-w-[50%] w-full h-full gap-3 items-center"

@@ -41,6 +41,39 @@ export const WordCard1 = ({ word, definition, forgot, change }: { word: string; 
     );
 };
 
+export const WordCard3 = ({ word, definition, forgot, change }: { word: string; definition: string; forgot?: boolean; change?: number }) => {
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    const flipCard = () => {
+        setIsFlipped(!isFlipped);
+    };
+
+    useEffect(() => {
+        setInterval(() => {
+            flipCard();
+        }, 3000);
+    }, []);
+
+    const cardStyle = "flex flex-col items-center justify-center max-w-md w-full p-10  h-[400px]";
+
+    return (
+        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+            <div className="flex justify-center box-border ">
+                <Card className={forgot === true ? "border-primary" + " " + cardStyle : cardStyle} onClick={flipCard}>
+                    <H2>{word}</H2>
+                </Card>
+            </div>
+            <div className="flex justify-center box-border ">
+                <Card className={forgot === true ? "border-primary" + " " + cardStyle : cardStyle} onClick={flipCard}>
+                    <CardContent className={isFlipped === false ? "hidden" : ""}>
+                        <P>{definition}</P>
+                    </CardContent>
+                </Card>
+            </div>
+        </ReactCardFlip>
+    );
+};
+
 export const WordCard2 = ({ preset, words }: Readonly<{ preset: string; words: { word: string; definition: string; forgot: boolean }[] }>) => {
     const [forgotIndex, setForgotIndex] = useState<number[]>([]);
     const [deletedIndex, setDeletedIndex] = useState<number[]>([]);
