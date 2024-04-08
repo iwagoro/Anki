@@ -10,7 +10,7 @@ import { Tab } from "@mui/material";
 export const DataTable = ({ words }: { words: wordProp[] }) => {
     const { theme } = useTheme();
     return (
-        <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll hidden-scrollbar">
+        <div className="py-[70px]  max-w-md w-full h-full px-5 flex flex-col  gap-10 overflow-y-scroll hidden-scrollbar">
             <Table className="border border-border ">
                 <TableHeader>
                     <TableRow>

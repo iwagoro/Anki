@@ -1,5 +1,5 @@
 "use client";
-import { WordCard1, WordCard2, WordCard3 } from "@/components/util/word-card";
+import { WordCard1, WordCard2, WordCard3, WordCard4 } from "@/components/util/word-card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { getWords, setAsForgot, setAsLearn, updateDate } from "@/components/util/data-util";
@@ -109,11 +109,11 @@ export default function Home() {
             {isList && (
                 <div className="py-[70px]  max-w-md w-full h-full px-10 flex flex-col  gap-10 overflow-y-scroll hidden-scrollbar">
                     {!isHate && <WordCard2 preset={param.cards as string} words={words}></WordCard2>}
-                    {isHate && <WordCard2 preset={param.cards as string} words={hateWords}></WordCard2>}
+                    {isHate && <WordCard4 preset={param.cards as string} words={hateWords} originWords={words}></WordCard4>}
                 </div>
             )}
             {!isList && !isFocused && (
-                <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-10 justify-between gap-5">
+                <div {...handlers} className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-5 justify-between gap-5">
                     <Progress value={!isHate ? ((index + 1) * 100) / words.length : ((index2 + 1) * 100) / hateWords.length}></Progress>
                     {!autoPlay ? (
                         <>
@@ -139,7 +139,18 @@ export default function Home() {
                                     const fixedIndex = words.findIndex((word) => word.word === hateWords[index2].word);
                                     setAsForgot(param.cards as string, fixedIndex, words);
                                 }
-                                if (next !== false) incrementIndex();
+                                if (next !== false) {
+                                    incrementIndex();
+                                } else {
+                                    if (quitCount === 0) {
+                                        toast("you have finished the list", { description: "you can quit by clicking the button again" });
+                                        setQuitCount(1);
+                                    } else if (quitCount === 1) {
+                                        toast("quited", { description: "you can see the list of words by clicking the list button" });
+                                        router.push("/home");
+                                        setQuitCount(0);
+                                    }
+                                }
                             }}
                         >
                             <MdThumbDown size={24}></MdThumbDown>
