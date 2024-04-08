@@ -135,3 +135,67 @@ export const WordCard2 = ({ preset, words }: Readonly<{ preset: string; words: {
         </>
     );
 };
+
+export const WordCard4 = ({ preset, words, originWords }: Readonly<{ preset: string; words: { word: string; definition: string; forgot: boolean }[]; originWords: { word: string; definition: string; forgot: boolean }[] }>) => {
+    const [forgotIndex, setForgotIndex] = useState<number[]>([]);
+    const [deletedIndex, setDeletedIndex] = useState<number[]>([]);
+    return (
+        <>
+            {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
+                <Card key={"listed-card" + index} className={`${word.forgot === true || forgotIndex.includes(index) ? "border-primary" : ""} ${deletedIndex.includes(index) ? "hidden" : ""}`}>
+                    <CardHeader>
+                        <CardTitle>{word.word}</CardTitle>
+                        <CardDescription>{word.definition}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="w-full h-auto flex items-center">
+                            <Button
+                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border mr-3"
+                                variant="outline"
+                                onClick={() => {
+                                    const fixedIndex = originWords.findIndex((originWord) => originWord.word === word.word);
+                                    // setAsForgot(preset, fixedIndex, originWords);
+                                    setForgotIndex((prev) => [...prev, fixedIndex]);
+                                }}
+                            >
+                                <MdThumbDown></MdThumbDown>
+                            </Button>
+                            <Button
+                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border ml-3"
+                                variant="outline"
+                                onClick={() => {
+                                    const fixedIndex = originWords.findIndex((originWord) => originWord.word === word.word);
+                                    // setAsLearn(preset, fixedIndex, originWords);
+                                    setForgotIndex((prev) => prev.filter((i) => i !== fixedIndex));
+                                }}
+                            >
+                                <MdThumbUp></MdThumbUp>
+                            </Button>
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <div className="w-full flex items-center justify-start gap-2">
+                            {/* <Button
+                                variant="outline"
+                                onClick={async () => {
+                                    deleteWord(preset, index, words);
+                                }}
+                            >
+                                <MdEdit></MdEdit>
+                            </Button> */}
+                            <Button
+                                variant="outline"
+                                onClick={async () => {
+                                    deleteWord(preset, index, words);
+                                    setDeletedIndex((prev) => [...prev, index]);
+                                }}
+                            >
+                                <MdDelete></MdDelete>
+                            </Button>
+                        </div>
+                    </CardFooter>
+                </Card>
+            ))}
+        </>
+    );
+};
