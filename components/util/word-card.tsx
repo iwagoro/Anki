@@ -151,12 +151,12 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
 
                 <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
                     <div className="flex justify-center box-border ">
-                        <Card className={cardStyle} onClick={flipCard}>
+                        <Card className={cardStyle + "  " + (isFocused ? "border-primary" : words[index] && words[index].forgot ? "border-primary" : "")} onClick={flipCard}>
                             {isFocused ? <H2>{focusWords[focusIndex] && focusWords[focusIndex].word ? focusWords[focusIndex].word : "Nan"}</H2> : <H2>{words[index] && words[index].word ? words[index].word : "Nan"}</H2>}
                         </Card>
                     </div>
                     <div className="flex justify-center box-border ">
-                        <Card className={cardStyle} onClick={flipCard}>
+                        <Card className={cardStyle + "  " + (isFocused ? "border-primary" : words[index] && words[index].forgot ? "border-primary" : "")} onClick={flipCard}>
                             <CardContent className={isFlipped === false ? "hidden" : ""}>{isFocused ? <P>{focusWords[focusIndex] && focusWords[focusIndex].definition ? focusWords[focusIndex].definition : "Nan"}</P> : <P>{words[index] && words[index].definition ? words[index].definition : "Nan"}</P>}</CardContent>
                         </Card>
                     </div>
