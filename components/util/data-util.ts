@@ -31,8 +31,7 @@ export const addWordToPreset = async (csv: string, preset: string) => {
         word.forgot = true;
     });
     const docRef = doc(db, "user", "test", "presets", preset.replaceAll(" ", "-"));
-    console.log(words);
-    await updateDoc(docRef, { words: arrayUnion(...words) });
+    await updateDoc(docRef, { words: arrayUnion(...words), length: increment(words.length) });
 };
 
 export const addWordFromCSV = async (csv: string, preset: string) => {

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Textarea } from "@/components/ui/textarea";
 
 const readCSVFile = async (file: any) => {
     return new Promise((resolve, reject) => {
@@ -60,15 +61,14 @@ export const AddCard = () => {
 
                             <div className="w-full">
                                 <Label className="w-full">Paste CSV here</Label>
-                                <textarea
-                                    className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                <Textarea
                                     placeholder="word, definition"
                                     onChange={(e) => {
                                         if (e.target.value !== null) {
                                             setCSV(e.target.value);
                                         }
                                     }}
-                                ></textarea>
+                                ></Textarea>
                             </div>
                             <div className="w-full">
                                 <Label className="w-full">Enter preset name</Label>

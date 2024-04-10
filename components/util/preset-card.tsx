@@ -13,6 +13,7 @@ import { Label } from "../ui/label";
 import Link from "next/link";
 import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from "recharts";
 import { H3 } from "./typography";
+import { Textarea } from "../ui/textarea";
 
 export const PresetCard = ({ name, description, length, known }: { name: string; description: string; length: number; known: number }) => {
     const [isExisted, setIsExisted] = useState(true);
@@ -79,14 +80,14 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                                 <CardContent>
                                     <div className="w-full">
                                         <Label className="w-full">Paste CSV here</Label>
-                                        <textarea
-                                            className="w-full border border-border bg-background"
+                                        <Textarea
+                                            placeholder="word, definition"
                                             onChange={(e) => {
                                                 if (e.target.value !== null) {
                                                     setCSV(e.target.value);
                                                 }
                                             }}
-                                        ></textarea>
+                                        ></Textarea>
                                     </div>
                                 </CardContent>
                                 <CardFooter className="flex justify-end">

@@ -111,7 +111,7 @@ export const TopBar = () => {
                                 }}
                             >
                                 {isFocused ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
-                                <Large>Only You don't know</Large>
+                                <Large>Focus Mode</Large>
                             </SheetClose>
                             <SheetClose
                                 className={`flex gap-5 items-center bg-transparent cursor-pointer  ${autoPlay ? "text-primary" : ""}`}

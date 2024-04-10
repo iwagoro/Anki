@@ -16,51 +16,54 @@ import { AppContext } from "@/components/util/provider";
 
 export const WordCardListView = ({ words }: { words: { word: string; definition: string; forgot: boolean }[] }) => {
     const param = useParams();
+    const { isFocused } = useContext(AppContext);
     return (
         <div className="flex flex-col gap-5">
             {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
-                <Card key={"listed-card" + index} className={word.forgot ? "border-primary" : ""}>
-                    <CardHeader>
-                        <CardTitle>{word.word}</CardTitle>
-                        <CardDescription>{word.definition}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="w-full h-auto flex items-center">
-                            <Button
-                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border mr-3"
-                                variant="outline"
-                                onClick={() => {
-                                    if (word.forgot) return;
-                                    setAsForgot(param.cards as string, word);
-                                }}
-                            >
-                                <MdThumbDown></MdThumbDown>
-                            </Button>
-                            <Button
-                                className=" w-[300px] h-auto py-5 gap-3 items-center box-border ml-3"
-                                variant="outline"
-                                onClick={() => {
-                                    if (!word.forgot) return;
-                                    setAsLearn(param.cards as string, word);
-                                }}
-                            >
-                                <MdThumbUp></MdThumbUp>
-                            </Button>
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                        <div className="w-full flex items-center justify-start gap-2">
-                            <Button
-                                variant="outline"
-                                onClick={async () => {
-                                    deleteWord(param.cards as string, word);
-                                }}
-                            >
-                                <MdDelete></MdDelete>
-                            </Button>
-                        </div>
-                    </CardFooter>
-                </Card>
+                <div className={isFocused && !word.forgot ? "hidden" : ""}>
+                    <Card key={"listed-card" + index} className={word.forgot ? "border-primary" : ""}>
+                        <CardHeader>
+                            <CardTitle>{word.word}</CardTitle>
+                            <CardDescription>{word.definition}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="w-full h-auto flex items-center">
+                                <Button
+                                    className=" w-[300px] h-auto py-5 gap-3 items-center box-border mr-3"
+                                    variant="outline"
+                                    onClick={() => {
+                                        if (word.forgot) return;
+                                        setAsForgot(param.cards as string, word);
+                                    }}
+                                >
+                                    <MdThumbDown></MdThumbDown>
+                                </Button>
+                                <Button
+                                    className=" w-[300px] h-auto py-5 gap-3 items-center box-border ml-3"
+                                    variant="outline"
+                                    onClick={() => {
+                                        if (!word.forgot) return;
+                                        setAsLearn(param.cards as string, word);
+                                    }}
+                                >
+                                    <MdThumbUp></MdThumbUp>
+                                </Button>
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                            <div className="w-full flex items-center justify-start gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={async () => {
+                                        deleteWord(param.cards as string, word);
+                                    }}
+                                >
+                                    <MdDelete></MdDelete>
+                                </Button>
+                            </div>
+                        </CardFooter>
+                    </Card>
+                </div>
             ))}
         </div>
     );
