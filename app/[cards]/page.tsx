@@ -13,16 +13,17 @@ export default function Home() {
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const { isList, isFocused, isDB, autoPlay } = useContext(AppContext);
     const [focusWords, setFocusWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
+    const { user } = useContext(AppContext);
     const param = useParams();
     useEffect(() => {
         const fetchData = async () => {
-            const docRef = doc(db, "user", "test", "presets", param.cards as string);
+            const docRef = doc(db, "user", user, "presets", param.cards as string);
             onSnapshot(docRef, (snapshot) => {
                 const words = snapshot.data()?.words ?? [];
                 setWords(words);
             });
         };
-        fetchData();
+        if (user !== "") fetchData();
     }, []);
 
     return (

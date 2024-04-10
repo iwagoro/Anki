@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { createContext, useEffect } from "react";
-import { getPresets } from "@/components/util/data-util";
-import { onSnapshot } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { app } from "@/components/util/firebase";
 
 interface preset {
     name: string;
@@ -30,11 +31,28 @@ const AppContext = createContext(
 );
 const Provider = ({ children }: { children: React.ReactNode }) => {
     const [presets, setPresets] = useState<preset[]>([]);
-    const [user, setUser] = useState<string>("test");
+    const [user, setUser] = useState<string>("");
     const [isList, setIsList] = useState<boolean>(false);
     const [isDB, setIsDB] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [autoPlay, setAutoPlay] = useState<boolean>(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        const auth = getAuth(app);
+        const fetchData = async () => {
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    setUser(user.email || "");
+                } else {
+                    setUser("");
+                    router.push("/login");
+                }
+            });
+            return unsubscribe;
+        };
+        fetchData();
+    }, []);
 
     // AppContext に setPresets も含める
     const contextValue = { isList, setIsList, presets, setPresets, user, setUser, isFocused, setIsFocused, autoPlay, setAutoPlay, isDB, setIsDB };

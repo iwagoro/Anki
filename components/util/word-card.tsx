@@ -13,10 +13,11 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 import { MdDelete, MdEdit } from "react-icons/md";
 import { AppContext } from "@/components/util/provider";
+import { set } from "date-fns";
 
 export const WordCardListView = ({ words }: { words: { word: string; definition: string; forgot: boolean }[] }) => {
     const param = useParams();
-    const { isFocused } = useContext(AppContext);
+    const { user, isFocused } = useContext(AppContext);
     return (
         <div className="flex flex-col gap-5">
             {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
@@ -33,7 +34,7 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
                                     variant="outline"
                                     onClick={() => {
                                         if (word.forgot) return;
-                                        setAsForgot(param.cards as string, word);
+                                        setAsForgot(user, param.cards as string, word);
                                     }}
                                 >
                                     <MdThumbDown></MdThumbDown>
@@ -43,7 +44,7 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
                                     variant="outline"
                                     onClick={() => {
                                         if (!word.forgot) return;
-                                        setAsLearn(param.cards as string, word);
+                                        setAsLearn(user, param.cards as string, word);
                                     }}
                                 >
                                     <MdThumbUp></MdThumbUp>
@@ -55,7 +56,7 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
                                 <Button
                                     variant="outline"
                                     onClick={async () => {
-                                        deleteWord(param.cards as string, word);
+                                        deleteWord(user, param.cards as string, word);
                                     }}
                                 >
                                     <MdDelete></MdDelete>
@@ -73,8 +74,10 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
     const [index, setIndex] = useState(0);
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
-    const { autoPlay } = useContext(AppContext);
+    const { user, autoPlay, isFocused } = useContext(AppContext);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [focusWords, setFocusWords] = useState(words);
+    const [focusIndex, setFocusIndex] = useState(0);
     const param = useParams();
     const cardStyle = "flex flex-col items-center justify-center max-w-md w-full p-10  h-[400px]";
     const flipCard = () => {
@@ -82,20 +85,38 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
     };
 
     const nextPage = () => {
-        if (index < words.length - 1) {
-            setNext(true);
-            setIndex(index + 1);
+        if (isFocused) {
+            if (focusIndex < focusWords.length - 1) {
+                setNext(true);
+                setFocusIndex(focusIndex + 1);
+            } else {
+                setNext(false);
+            }
         } else {
-            setNext(false);
+            if (index < words.length - 1) {
+                setNext(true);
+                setIndex(index + 1);
+            } else {
+                setNext(false);
+            }
         }
     };
 
     const prevPage = () => {
-        if (index > 0) {
-            setBack(true);
-            setIndex(index - 1);
+        if (isFocused) {
+            if (focusIndex > 0) {
+                setBack(true);
+                setFocusIndex(focusIndex - 1);
+            } else {
+                setBack(false);
+            }
         } else {
-            setBack(false);
+            if (index > 0) {
+                setBack(true);
+                setIndex(index - 1);
+            } else {
+                setBack(false);
+            }
         }
     };
 
@@ -116,22 +137,27 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
         }
     }, [autoPlay, index]);
 
+    useEffect(() => {
+        let data = words.filter((word) => {
+            return word.forgot;
+        });
+        setFocusWords(data);
+    }, [words]);
+
     return (
         <div className="w-full flex items-center justify-center">
             <div className=" pt-[70px] max-w-md w-full h-full flex flex-col pt-50  px-5  justify-between gap-5">
-                <Progress value={((index + 1) * 100) / words.length}></Progress>
+                <Progress value={isFocused ? ((focusIndex + 1) * 100) / focusWords.length : ((index + 1) * 100) / words.length}></Progress>
 
                 <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
                     <div className="flex justify-center box-border ">
                         <Card className={cardStyle} onClick={flipCard}>
-                            <H2>{words[index] && words[index].word ? words[index].word : "Nan"}</H2>
+                            {isFocused ? <H2>{focusWords[focusIndex] && focusWords[focusIndex].word ? focusWords[focusIndex].word : "Nan"}</H2> : <H2>{words[index] && words[index].word ? words[index].word : "Nan"}</H2>}
                         </Card>
                     </div>
                     <div className="flex justify-center box-border ">
                         <Card className={cardStyle} onClick={flipCard}>
-                            <CardContent className={isFlipped === false ? "hidden" : ""}>
-                                <P>{words[index] && words[index].definition ? words[index].definition : "Nan"}</P>
-                            </CardContent>
+                            <CardContent className={isFlipped === false ? "hidden" : ""}>{isFocused ? <P>{focusWords[focusIndex] && focusWords[focusIndex].definition ? focusWords[focusIndex].definition : "Nan"}</P> : <P>{words[index] && words[index].definition ? words[index].definition : "Nan"}</P>}</CardContent>
                         </Card>
                     </div>
                 </ReactCardFlip>
@@ -143,10 +169,13 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                         onClick={() => {
                             setIsFlipped(false);
                             nextPage();
-                            if (words[index].forgot) return;
-                            setAsForgot(param.cards as string, words[index]);
-
-                            
+                            if (isFocused) {
+                                if (focusWords[focusIndex].forgot) return;
+                                setAsForgot(user, param.cards as string, focusWords[focusIndex]);
+                            } else {
+                                if (words[index].forgot) return;
+                                setAsForgot(user, param.cards as string, words[index]);
+                            }
                         }}
                     >
                         <MdThumbDown size={24}></MdThumbDown>
@@ -158,9 +187,13 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                         onClick={() => {
                             setIsFlipped(false);
                             nextPage();
-                            if (!words[index].forgot) return;
-                            setAsLearn(param.cards as string, words[index]);
-                            
+                            if (isFocused) {
+                                if (!focusWords[focusIndex].forgot) return;
+                                setAsLearn(user, param.cards as string, focusWords[focusIndex]);
+                            } else {
+                                if (!words[index].forgot) return;
+                                setAsLearn(user, param.cards as string, words[index]);
+                            }
                         }}
                     >
                         know

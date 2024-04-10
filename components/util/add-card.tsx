@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
+import { AppContext } from "@/components/util/provider";
 
 const readCSVFile = async (file: any) => {
     return new Promise((resolve, reject) => {
@@ -30,6 +31,7 @@ export const AddCard = () => {
     const [file, setFile] = useState({});
     const [csv, setCSV] = useState("");
     const [presetName, setPresetName] = useState("");
+    const { user } = useContext(AppContext);
     return (
         <Card>
             <Accordion type="single" collapsible>
@@ -88,7 +90,7 @@ export const AddCard = () => {
                                             readCSVFile(file)
                                                 .then((csvData) => {
                                                     console.log(csvData); // 適切なCSVデータがログに表示されるはず
-                                                    addWordFromCSV(csvData as string, presetName);
+                                                    addWordFromCSV(user, csvData as string, presetName);
                                                     const date = format(new Date(), "yyyy-MM-dd");
                                                     toast(name + "was added sucessfully", { description: date });
                                                 })
@@ -97,7 +99,7 @@ export const AddCard = () => {
                                                 });
                                         } else if (csv !== "") {
                                             console.log(csv);
-                                            addWordFromCSV(csv, presetName);
+                                            addWordFromCSV(user, csv, presetName);
 
                                             const date = format(new Date(), "yyyy-MM-dd");
                                             toast(name + "was added sucessfully", { description: date });

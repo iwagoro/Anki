@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { MdDelete, MdAdd, MdSearch } from "react-icons/md";
 import { addWordToPreset, deletePreset } from "./data-util";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -14,9 +14,11 @@ import Link from "next/link";
 import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from "recharts";
 import { H3 } from "./typography";
 import { Textarea } from "../ui/textarea";
+import { AppContext } from "./provider";
 
 export const PresetCard = ({ name, description, length, known }: { name: string; description: string; length: number; known: number }) => {
     const [csv, setCSV] = useState("");
+    const { user } = useContext(AppContext);
     const data = [
         {
             name: "A",
@@ -59,7 +61,7 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                             <MdDelete
                                 onClick={async () => {
                                     const date = format(new Date(), "yyyy-MM-dd");
-                                    await deletePreset(name);
+                                    await deletePreset(user, name);
                                     toast(name + "was deleted sucessfully", { description: date });
                                 }}
                             ></MdDelete>
@@ -92,7 +94,7 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                                     <Button
                                         onClick={() => {
                                             if (csv !== "") {
-                                                addWordToPreset(csv, name);
+                                                addWordToPreset(user, csv, name);
                                             }
                                             const date = format(new Date(), "yyyy-MM-dd");
                                             toast(name + "was added sucessfully", { description: date });
