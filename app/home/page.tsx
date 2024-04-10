@@ -3,14 +3,24 @@ import { useEffect, useState } from "react";
 import { PresetCard } from "@/components/util/preset-card";
 import { getPresets, addWordFromCSV } from "@/components/util/data-util";
 import { AddCard } from "@/components/util/add-card";
-import { Toaster } from "@/components/ui/sonner";
-
+import { useParams } from "next/navigation";
+import { collection, doc, onSnapshot, getFirestore, DocumentData } from "firebase/firestore";
+import { app } from "@/components/util/firebase";
 export default function Home() {
-    const [presets, setPresets] = useState([]);
+    const [presets, setPresets] = useState<{ name: string; description: string; length: number; known: number }[]>([]);
+    const db = getFirestore(app);
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getPresets();
-            setPresets(data as []);
+            const docRef = collection(db, "user", "test", "presets");
+            onSnapshot(docRef, (snapshot) => {
+                let data = [] as any[];
+                snapshot.docs.forEach((doc: DocumentData) => {
+                    let result = doc.data();
+                    delete result.words;
+                    data.push(result);
+                });
+                setPresets(data);
+            });
         };
         fetchData();
     }, []);

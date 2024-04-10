@@ -6975,6 +6975,11 @@ swiper@*, swiper@^11.1.0:
   resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.1.0.tgz#3497b60d65d1320e427cdf11dfaad5c555283826"
   integrity sha512-Pm78CgU7Wvg+w/MgIL/1NwMSLgx0XqFof25EnVyX8iZFCYJv5CppH7LHkBj43qW2k5Cp3Iz7FcdBxrox7XX2AQ==
 
+switch@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/switch/-/switch-0.0.0.tgz#4a9d225b00799fb16ee0214663b0b0b22ce133cf"
+  integrity sha512-Pvi4hlAXWHEIT+4XlQEPPIQ02hRzvn38K/cnZ5sZeM11FsDPoXvBD6i/zyVxFK6cgqSlS8sA5/sIwUGp9+ZMhw==
+
 tailwind-merge@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.2.2.tgz#87341e7604f0e20499939e152cd2841f41f7a3df"
