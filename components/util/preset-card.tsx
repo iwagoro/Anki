@@ -16,7 +16,6 @@ import { H3 } from "./typography";
 import { Textarea } from "../ui/textarea";
 
 export const PresetCard = ({ name, description, length, known }: { name: string; description: string; length: number; known: number }) => {
-    const [isExisted, setIsExisted] = useState(true);
     const [csv, setCSV] = useState("");
     const data = [
         {
@@ -38,7 +37,7 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
         lineHeight: "24px",
     };
     return (
-        <div className={`w-full md:w-[45%] ${isExisted === true ? " " : " hidden"}`}>
+        <div className={`w-full md:w-[45%] `}>
             <Card>
                 <Link href={`/${length !== 0 ? name : "home"}`}>
                     <CardHeader>
@@ -59,7 +58,6 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                         <Button variant="outline">
                             <MdDelete
                                 onClick={async () => {
-                                    setIsExisted(false);
                                     const date = format(new Date(), "yyyy-MM-dd");
                                     await deletePreset(name);
                                     toast(name + "was deleted sucessfully", { description: date });
