@@ -19,12 +19,12 @@ import { toast } from "sonner";
 
 import { useTheme } from "next-themes";
 export const TopBar = () => {
-    const { isList, setIsList, isFocused, setIsFocused, isHate, setIsHate, autoPlay, setAutoPlay } = useContext(AppContext);
+    const { isList, setIsList, isFocused, setIsFocused, autoPlay, setAutoPlay, isDB, setIsDB } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
 
     return (
         <>
-            <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-transparent">
+            <div className="absolute z-50 max-w-2xl w-full h-[50px] flex justify-between items-center px-10  gap-10 bg-background">
                 <Link href="/home">
                     <div className="flex gap-4 items-center bg-transparent">
                         <svg width="24" height="24" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +58,17 @@ export const TopBar = () => {
                             <SheetDescription className="text-left">Currently the only user is a test user. We plan to implement authentication with a Google account sometime in the future.</SheetDescription>
                         </SheetHeader>
                         <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border">
-                            {/* <SheetClose
+                            <SheetClose
+                                className={`flex gap-5 items-center  bg-transparent curosr-pointer  ${theme === "dark" ? "text-white" : "text-black"}`}
+                                onClick={() => {
+                                    setTheme(theme === "dark" ? "light" : "dark");
+                                    toast("Theme Changed", { description: "You can change the theme by clicking the button" });
+                                }}
+                            >
+                                {theme === "dark" ? <MdBrightness5 size={24} /> : <MdBrightness2 size={24} />}
+                                <Large>Change Color</Large>
+                            </SheetClose>
+                            <SheetClose
                                 className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`}
                                 onClick={() => {
                                     if (isList) {
@@ -72,27 +82,17 @@ export const TopBar = () => {
                             >
                                 <TbArrowsExchange size={24}></TbArrowsExchange>
                                 <Large>List Mode</Large>
-                            </SheetClose> */}
-                            <SheetClose
-                                className={`flex gap-5 items-center  bg-transparent curosr-pointer  ${theme === "dark" ? "text-white" : "text-black"}`}
-                                onClick={() => {
-                                    setTheme(theme === "dark" ? "light" : "dark");
-                                    toast("Theme Changed", { description: "You can change the theme by clicking the button" });
-                                }}
-                            >
-                                {theme === "dark" ? <MdBrightness5 size={24} /> : <MdBrightness2 size={24} />}
-                                <Large>Change Color</Large>
                             </SheetClose>
 
                             <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`}
+                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isDB ? "text-primary" : ""}`}
                                 onClick={() => {
-                                    if (isFocused) {
+                                    if (isDB) {
                                         toast("turn off Database Mode", { description: "You can see the list of words by clicking the list button" });
                                     } else {
                                         toast("Database Mode", { description: "You can see the list of words by clicking the list button" });
                                     }
-                                    setIsFocused((prev: boolean) => !prev);
+                                    setIsDB((prev: boolean) => !prev);
                                     setIsList(false);
                                 }}
                             >
@@ -100,17 +100,17 @@ export const TopBar = () => {
                                 <Large>Database Mode</Large>
                             </SheetClose>
                             <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isHate ? "text-primary" : ""}`}
+                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`}
                                 onClick={() => {
-                                    if (isHate) {
+                                    if (isFocused) {
                                         toast("turn off Focus Modee", { description: "You can see the list of words by clicking the list button" });
                                     } else {
                                         toast("Focus Mode", { description: "You can see the list of words by clicking the list button" });
                                     }
-                                    setIsHate((prev: boolean) => !prev);
+                                    setIsFocused((prev: boolean) => !prev);
                                 }}
                             >
-                                {isHate ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
+                                {isFocused ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
                                 <Large>Only You don't know</Large>
                             </SheetClose>
                             <SheetClose

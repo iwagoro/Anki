@@ -2,7 +2,7 @@ import { app } from "@/components/util/firebase";
 import * as fs from "fs";
 import { parse } from "csv-parse/sync";
 
-import { deleteDoc, getFirestore, setDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, deleteDoc, getFirestore, increment, setDoc } from "firebase/firestore";
 import { format } from "date-fns";
 import { getDocs, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 
@@ -31,15 +31,8 @@ export const addWordToPreset = async (csv: string, preset: string) => {
         word.forgot = true;
     });
     const docRef = doc(db, "user", "test", "presets", preset.replaceAll(" ", "-"));
-    const prevWords = (await getDoc(docRef)).data()?.words ?? [];
-    const newWords = [...prevWords, ...words];
-    console.log(preset, newWords.length, words.known, newWords);
-    await setDoc(docRef, {
-        name: preset.replaceAll(" ", "-"),
-        length: newWords.length,
-        known: prevWords.known || 0,
-        words: newWords,
-    });
+    console.log(words);
+    await updateDoc(docRef, { words: arrayUnion(...words) });
 };
 
 export const addWordFromCSV = async (csv: string, preset: string) => {
@@ -65,30 +58,16 @@ export const getWords = async (preset: string) => {
     return words;
 };
 
-export const setAsForgot = async (preset: string, index: number, words: any) => {
+export const setAsForgot = async (preset: string, word: any) => {
     const docRef = doc(db, "user", "test", "presets", preset);
-    console.log(index);
-    words[index].forgot = true;
-    let cnt = 0;
-    words.map((word: any) => {
-        if (word.forgot === false) {
-            cnt++;
-        }
-    });
-    updateDoc(docRef, { words: words, known: cnt });
+    await updateDoc(docRef, { words: arrayRemove(word) });
+    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: true }) });
 };
 
-export const setAsLearn = async (preset: string, index: number, words: any) => {
+export const setAsLearn = async (preset: string, word: any) => {
     const docRef = doc(db, "user", "test", "presets", preset);
-    words[index].forgot = false;
-    let cnt = 0;
-    words.map((word: any) => {
-        if (word.forgot === false) {
-            cnt++;
-        }
-    });
-
-    updateDoc(docRef, { words: words, known: cnt });
+    await updateDoc(docRef, { words: arrayRemove(word) });
+    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: false }) });
 };
 
 export const updateDate = async (preset: string) => {
@@ -98,21 +77,7 @@ export const updateDate = async (preset: string) => {
     await updateDoc(docRef, { description: date });
 };
 
-export const deleteWord = async (preset: string, index: number, words: any) => {
+export const deleteWord = async (preset: string, word: any) => {
     const docRef = doc(db, "user", "test", "presets", preset);
-    words.splice(index, 1);
-    let cnt = 0;
-    words.map((word: any) => {
-        if (word.forgot === false) {
-            cnt++;
-        }
-    });
-    updateDoc(docRef, { words: words, length: words.length, known: cnt });
-};
-
-export const editWord = async (preset: string, index: number, words: any, word: string, definition: string) => {
-    const docRef = doc(db, "user", "test", "presets", preset);
-    words[index].word = word;
-    words[index].definition = definition;
-    updateDoc(docRef, { words: words });
+    updateDoc(docRef, { words: arrayRemove(word), length: increment(-1) });
 };

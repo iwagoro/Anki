@@ -48,6 +48,7 @@
         "sonner": "^1.4.41",
         "styled-components": "^6.1.8",
         "swiper": "^11.1.0",
+        "switch": "^0.0.0",
         "tailwind-merge": "^2.2.2",
         "tailwindcss-animate": "^1.0.7"
     },

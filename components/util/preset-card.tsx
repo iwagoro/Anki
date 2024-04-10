@@ -80,7 +80,7 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                                     <div className="w-full">
                                         <Label className="w-full">Paste CSV here</Label>
                                         <textarea
-                                            className="w-full border border-border"
+                                            className="w-full border border-border bg-background"
                                             onChange={(e) => {
                                                 if (e.target.value !== null) {
                                                     setCSV(e.target.value);
