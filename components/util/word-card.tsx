@@ -141,11 +141,12 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                         className="max-w-[50%] w-full h-full gap-3 items-center"
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             nextPage();
                             if (words[index].forgot) return;
                             setAsForgot(param.cards as string, words[index]);
 
-                            setIsFlipped(false);
+                            
                         }}
                     >
                         <MdThumbDown size={24}></MdThumbDown>
@@ -155,10 +156,11 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                         className="max-w-[50%] w-full h-full gap-3 items-center"
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             nextPage();
                             if (!words[index].forgot) return;
                             setAsLearn(param.cards as string, words[index]);
-                            setIsFlipped(false);
+                            
                         }}
                     >
                         know
