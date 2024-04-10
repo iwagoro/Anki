@@ -20,8 +20,8 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
     return (
         <div className="flex flex-col gap-5">
             {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
-                <div className={isFocused && !word.forgot ? "hidden" : ""}>
-                    <Card key={"listed-card" + index} className={word.forgot ? "border-primary" : ""}>
+                <div key={"listed-card" + index} className={isFocused && !word.forgot ? "hidden" : ""}>
+                    <Card className={word.forgot ? "border-primary" : ""}>
                         <CardHeader>
                             <CardTitle>{word.word}</CardTitle>
                             <CardDescription>{word.definition}</CardDescription>
