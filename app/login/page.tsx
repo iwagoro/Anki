@@ -48,7 +48,7 @@ export default function Login() {
 
     const googleSignInHandler = async () => {
         const user = await googleSignIn();
-        if (user !== null && user !== undefined) {
+        if (user !== null && user !== undefined && user === "") {
             toast("Opps!", { description: "An error occured" });
         } else {
             router.push("/home");

@@ -13,11 +13,16 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 import { MdDelete, MdEdit } from "react-icons/md";
 import { AppContext } from "@/components/util/provider";
-import { set } from "date-fns";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export const WordCardListView = ({ words }: { words: { word: string; definition: string; forgot: boolean }[] }) => {
+export const WordCardListView = ({ originWords }: { originWords: { word: string; definition: string; forgot: boolean }[] }) => {
     const param = useParams();
     const { user, isFocused } = useContext(AppContext);
+    const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
+    useEffect(() => {
+        setWords(originWords);
+    }, [originWords]);
     return (
         <div className="flex flex-col gap-5">
             {words.map((word: { word: string; definition: string; forgot: boolean }, index: number) => (
@@ -34,6 +39,10 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
                                     variant="outline"
                                     onClick={() => {
                                         if (word.forgot) return;
+                                        setWords((prev) => {
+                                            prev[index].forgot = true;
+                                            return [...prev];
+                                        });
                                         setAsForgot(user, param.cards as string, word);
                                     }}
                                 >
@@ -44,6 +53,10 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
                                     variant="outline"
                                     onClick={() => {
                                         if (!word.forgot) return;
+                                        setWords((prev) => {
+                                            prev[index].forgot = false;
+                                            return [...prev];
+                                        });
                                         setAsLearn(user, param.cards as string, word);
                                     }}
                                 >
@@ -70,14 +83,18 @@ export const WordCardListView = ({ words }: { words: { word: string; definition:
     );
 };
 
-export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean; definition: string }[] }) => {
-    const [index, setIndex] = useState(0);
+export const WordCardFlip = ({ originWords }: { originWords: { word: string; forgot: boolean; definition: string }[] }) => {
     const [next, setNext] = useState(true);
     const [back, setBack] = useState(false);
     const { user, autoPlay, isFocused } = useContext(AppContext);
     const [isFlipped, setIsFlipped] = useState(false);
+
+    const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
+    const [index, setIndex] = useState(0);
+    const [quitCount, setQuitCount] = useState(0);
     const [focusWords, setFocusWords] = useState(words);
     const [focusIndex, setFocusIndex] = useState(0);
+    const router = useRouter();
     const param = useParams();
     const cardStyle = "flex flex-col items-center justify-center max-w-md w-full p-10  h-[400px]";
     const flipCard = () => {
@@ -89,14 +106,26 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
             if (focusIndex < focusWords.length - 1) {
                 setNext(true);
                 setFocusIndex(focusIndex + 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setNext(false);
             }
         } else {
             if (index < words.length - 1) {
                 setNext(true);
                 setIndex(index + 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setNext(false);
             }
         }
@@ -107,14 +136,26 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
             if (focusIndex > 0) {
                 setBack(true);
                 setFocusIndex(focusIndex - 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setBack(false);
             }
         } else {
             if (index > 0) {
                 setBack(true);
                 setIndex(index - 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setBack(false);
             }
         }
@@ -138,11 +179,12 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
     }, [autoPlay, index]);
 
     useEffect(() => {
-        let data = words.filter((word) => {
+        setWords(originWords);
+        let data = originWords.filter((word) => {
             return word.forgot;
         });
         setFocusWords(data);
-    }, [words]);
+    }, [originWords]);
 
     return (
         <div className="w-full flex items-center justify-center">
@@ -171,9 +213,17 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                             nextPage();
                             if (isFocused) {
                                 if (focusWords[focusIndex].forgot) return;
+                                setFocusWords((prev) => {
+                                    prev[focusIndex].forgot = true;
+                                    return [...prev];
+                                });
                                 setAsForgot(user, param.cards as string, focusWords[focusIndex]);
                             } else {
                                 if (words[index].forgot) return;
+                                setWords((prev) => {
+                                    prev[index].forgot = true;
+                                    return [...prev];
+                                });
                                 setAsForgot(user, param.cards as string, words[index]);
                             }
                         }}
@@ -189,9 +239,17 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                             nextPage();
                             if (isFocused) {
                                 if (!focusWords[focusIndex].forgot) return;
+                                setFocusWords((prev) => {
+                                    prev[focusIndex].forgot = false;
+                                    return [...prev];
+                                });
                                 setAsLearn(user, param.cards as string, focusWords[focusIndex]);
                             } else {
                                 if (!words[index].forgot) return;
+                                setWords((prev) => {
+                                    prev[index].forgot = false;
+                                    return [...prev];
+                                });
                                 setAsLearn(user, param.cards as string, words[index]);
                             }
                         }}
@@ -205,6 +263,7 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                     <Button
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             prevPage();
                         }}
                     >
@@ -214,6 +273,7 @@ export const WordCardFlip = ({ words }: { words: { word: string; forgot: boolean
                     <Button
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             nextPage();
                         }}
                     >
