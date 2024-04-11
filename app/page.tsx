@@ -6,14 +6,6 @@ import { app } from "@/components/util/firebase";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    const router = useRouter();
-    useEffect(() => {
-        router.push("/home");
-    }, []);
-
-=======
     const { user, setUser } = useContext(AppContext);
     const router = useRouter();
 
@@ -32,9 +24,6 @@ export default function Home() {
         };
         fetchData();
     }, []);
->>>>>>> Stashed changes
-=======
->>>>>>> 2eb7dea71c78ddafb0f5669383d0924850749e7d
     return <></>;
 }
 
