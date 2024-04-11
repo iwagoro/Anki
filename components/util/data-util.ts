@@ -60,13 +60,13 @@ export const getWords = async (user: string, preset: string) => {
 export const setAsForgot = async (user: string, preset: string, word: any) => {
     const docRef = doc(db, "user", user, "presets", preset);
     await updateDoc(docRef, { words: arrayRemove(word) });
-    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: true }) });
+    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: true }), known: increment(-1) });
 };
 
 export const setAsLearn = async (user: string, preset: string, word: any) => {
     const docRef = doc(db, "user", user, "presets", preset);
     await updateDoc(docRef, { words: arrayRemove(word) });
-    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: false }) });
+    await updateDoc(docRef, { words: arrayUnion({ ...word, forgot: false }), known: increment(1) });
 };
 
 export const updateDate = async (user: string, preset: string) => {
