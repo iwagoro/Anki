@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyDNe8XJwAX7Cgkcf6fyZ1FUxLX4BF3khBA",
-    authDomain: "anki-5c921.web.app",
+    authDomain: "anki-5c921.firebaseapp.com",
     projectId: "anki-5c921",
     storageBucket: "anki-5c921.appspot.com",
     messagingSenderId: "882352762459",
