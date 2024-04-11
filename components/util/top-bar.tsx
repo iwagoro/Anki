@@ -17,16 +17,29 @@ import { MdOutlineAutoMode } from "react-icons/md";
 import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
 import { MdLogout } from "react-icons/md";
-import { logOut } from "./auth";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
 
 import { useTheme } from "next-themes";
-import { set } from "date-fns";
+import { app } from "@/components/util/firebase";
+import { getAuth } from "firebase/auth";
 export const TopBar = () => {
     const { user, isList, setIsList, isFocused, setIsFocused, autoPlay, setAutoPlay, isDB, setIsDB } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
     const router = useRouter();
+
+    const logOut = () => {
+        const auth = getAuth(app);
+        auth.signOut()
+            .then(() => {
+                console.log("logged out ");
+                toast("Logged out", { description: "success" });
+            })
+            .catch((error) => {
+                console.log("error logging out");
+                toast("Error logging out", { description: "error" });
+            });
+    };
 
     return (
         <>
