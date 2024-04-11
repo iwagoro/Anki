@@ -7,7 +7,9 @@ import { createUser, signIn } from "@/components/util/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
-import { googleSignIn } from "@/components/util/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { app } from "@/components/util/firebase";
+import { getAuth } from "firebase/auth";
 export default function Login() {
     const router = useRouter();
 
@@ -47,13 +49,24 @@ export default function Login() {
     };
 
     const googleSignInHandler = async () => {
-        const user = await googleSignIn();
-        if (user !== null && user !== undefined && user === "") {
-            toast("Opps!", { description: "An error occured" });
-        } else {
-            router.push("/home");
-            toast("Success", { description: "You have successfully signed in" });
-        }
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                console.log(user);
+
+                if (user.email === "") {
+                    toast("Opps!", { description: "An error occured" });
+                } else {
+                    console.log(user);
+                    router.push("/home");
+                    toast("Success", { description: "You have successfully signed in" });
+                }
+            })
+            .catch((error) => {
+                toast("Opps!", { description: "An error occured" });
+            });
     };
 
     return (
