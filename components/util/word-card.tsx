@@ -236,6 +236,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                     <Button
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             prevPage();
                         }}
                     >
@@ -245,6 +246,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                     <Button
                         variant="outline"
                         onClick={() => {
+                            setIsFlipped(false);
                             nextPage();
                         }}
                     >
