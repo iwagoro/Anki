@@ -7,7 +7,7 @@ import { toast } from "sonner";
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export const googleSignIn = () => {
+export const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
         .then((result) => {
