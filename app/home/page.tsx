@@ -1,17 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { PresetCard } from "@/components/util/preset-card";
 import { getPresets, addWordFromCSV } from "@/components/util/data-util";
 import { AddCard } from "@/components/util/add-card";
 import { useParams } from "next/navigation";
 import { collection, doc, onSnapshot, getFirestore, DocumentData } from "firebase/firestore";
+import { AppContext } from "@/components/util/provider";
+
 import { app } from "@/components/util/firebase";
 export default function Home() {
     const [presets, setPresets] = useState<{ name: string; description: string; length: number; known: number }[]>([]);
+    const { user } = useContext(AppContext);
     const db = getFirestore(app);
     useEffect(() => {
         const fetchData = async () => {
-            const docRef = collection(db, "user", "test", "presets");
+            const docRef = collection(db, "user", user, "presets");
             onSnapshot(docRef, (snapshot) => {
                 let data = [] as any[];
                 snapshot.docs.forEach((doc: DocumentData) => {
@@ -22,8 +25,8 @@ export default function Home() {
                 setPresets(data);
             });
         };
-        fetchData();
-    }, []);
+        if (user !== "") fetchData();
+    }, [user]);
 
     return (
         <div className="py-[70px] w-full h-full px-5   overflow-scroll hidden-scrollbar">

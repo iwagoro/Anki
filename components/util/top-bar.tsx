@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { TbArrowsExchange } from "react-icons/tb";
 import { AppContext } from "@/components/util/provider";
 import { useContext } from "react";
-import { Input } from "../ui/input";
+import { Switch } from "@/components/ui/switch";
 import { MdBrightness5, MdBrightness2, MdOutlineAutoAwesome } from "react-icons/md";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { MdMenu } from "react-icons/md";
@@ -16,11 +16,17 @@ import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
 import { MdOutlineAutoMode } from "react-icons/md";
 import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
+import { MdLogout } from "react-icons/md";
+import { logOut } from "./auth";
+import { Separator } from "../ui/separator";
+import { useRouter } from "next/navigation";
 
 import { useTheme } from "next-themes";
+import { set } from "date-fns";
 export const TopBar = () => {
-    const { isList, setIsList, isFocused, setIsFocused, autoPlay, setAutoPlay, isDB, setIsDB } = useContext(AppContext);
+    const { user, isList, setIsList, isFocused, setIsFocused, autoPlay, setAutoPlay, isDB, setIsDB } = useContext(AppContext);
     const { theme, setTheme } = useTheme();
+    const router = useRouter();
 
     return (
         <>
@@ -53,9 +59,9 @@ export const TopBar = () => {
                                 <Avatar>
                                     <AvatarImage src="https://github.com/shadcn.png" alt="avatar" />
                                 </Avatar>
-                                Test User
+                                {user}
                             </SheetTitle>
-                            <SheetDescription className="text-left">Currently the only user is a test user. We plan to implement authentication with a Google account sometime in the future.</SheetDescription>
+                            <SheetDescription className="text-left">Welcome to the menu screen, {user}! Here you can change your settings for using the Wordbook. In List mode, you can increase the number of words displayed at one time, and in Focus mode, you can focus on words that you have difficulty with. You can also use the Auto Play mode to automatically flip through the wordbook at regular intervals!</SheetDescription>
                         </SheetHeader>
                         <div className="w-full flex flex-col gap-4  pb-5 border-b-[1px] border-border">
                             <SheetClose
@@ -68,65 +74,88 @@ export const TopBar = () => {
                                 {theme === "dark" ? <MdBrightness5 size={24} /> : <MdBrightness2 size={24} />}
                                 <Large>Change Color</Large>
                             </SheetClose>
-                            <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`}
-                                onClick={() => {
-                                    if (isList) {
-                                        toast("turn off List Mode", { description: "You can see the list of words by clicking the list button" });
-                                    } else {
-                                        toast("List Mode", { description: "You can see the list of words by clicking the list button" });
-                                    }
-                                    setIsList((prev: boolean) => !prev);
-                                    setIsFocused(false);
-                                }}
-                            >
+
+                            <SheetClose className="w-full flex flex-col gap-4  pb-5 border-border">
+                                <div
+                                    className={`flex gap-5 items-center  bg-transparent curosr-pointer`}
+                                    onClick={() => {
+                                        logOut();
+                                        router.push("/");
+                                    }}
+                                >
+                                    <MdLogout size={24} />
+                                    <Large>Log out</Large>
+                                </div>
+                            </SheetClose>
+                            <Separator></Separator>
+                            <div className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isList ? "text-primary" : ""}`}>
+                                <Switch
+                                    checked={isList}
+                                    onCheckedChange={() => {
+                                        if (isList) {
+                                            toast("turn off List Mode", { description: "You can see the list of words by clicking the List Mode button" });
+                                        } else {
+                                            toast("List Mode", { description: "You can see the list of words by clicking the List Mode button" });
+                                        }
+                                        setIsList((prev: boolean) => {
+                                            if (!prev) setIsDB(prev);
+                                            return !prev;
+                                        });
+                                    }}
+                                ></Switch>
                                 <TbArrowsExchange size={24}></TbArrowsExchange>
                                 <Large>List Mode</Large>
-                            </SheetClose>
+                            </div>
 
-                            <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isDB ? "text-primary" : ""}`}
-                                onClick={() => {
-                                    if (isDB) {
-                                        toast("turn off Database Mode", { description: "You can see the list of words by clicking the list button" });
-                                    } else {
-                                        toast("Database Mode", { description: "You can see the list of words by clicking the list button" });
-                                    }
-                                    setIsDB((prev: boolean) => !prev);
-                                    setIsList(false);
-                                }}
-                            >
+                            <div className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isDB ? "text-primary" : ""}`}>
+                                <Switch
+                                    checked={isDB}
+                                    onCheckedChange={() => {
+                                        if (isDB) {
+                                            toast("turn off Database Mode", { description: "You can see the list of words by clicking the Database Mode  button" });
+                                        } else {
+                                            toast("Database Mode", { description: "You can see the list of words by clicking the  Database Mode button" });
+                                        }
+                                        setIsDB((prev: boolean) => {
+                                            if (!prev) setIsList(prev);
+                                            return !prev;
+                                        });
+                                    }}
+                                ></Switch>
                                 <VscLayoutMenubar size={24}></VscLayoutMenubar>
                                 <Large>Database Mode</Large>
-                            </SheetClose>
-                            <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`}
-                                onClick={() => {
-                                    if (isFocused) {
-                                        toast("turn off Focus Modee", { description: "You can see the list of words by clicking the list button" });
-                                    } else {
-                                        toast("Focus Mode", { description: "You can see the list of words by clicking the list button" });
-                                    }
-                                    setIsFocused((prev: boolean) => !prev);
-                                }}
-                            >
+                            </div>
+                            <Separator></Separator>
+                            <div className={`flex gap-5 items-center bg-transparent cursor-pointer  ${isFocused ? "text-primary" : ""}`} onClick={() => {}}>
+                                <Switch
+                                    checked={isFocused}
+                                    onCheckedChange={() => {
+                                        if (isFocused) {
+                                            toast("turn off Focus Modee", { description: "You can see the list of words by clicking the Focus Mode button" });
+                                        } else {
+                                            toast("Focus Mode", { description: "You can see the list of words by clicking the Focus Mode button" });
+                                        }
+                                        setIsFocused((prev: boolean) => !prev);
+                                    }}
+                                ></Switch>
                                 {isFocused ? <LuLightbulb size={24} /> : <LuLightbulbOff size={24} />}
                                 <Large>Focus Mode</Large>
-                            </SheetClose>
-                            <SheetClose
-                                className={`flex gap-5 items-center bg-transparent cursor-pointer  ${autoPlay ? "text-primary" : ""}`}
-                                onClick={() => {
-                                    if (autoPlay) {
-                                        toast("turn off Autoplay", { description: "You can see the list of words by clicking the list button" });
-                                    } else {
-                                        toast("Autoplay", { description: "You can see the list of words by clicking the list button" });
-                                    }
-                                    setAutoPlay((prev: boolean) => !prev);
-                                }}
-                            >
+                            </div>
+                            <div className={`flex gap-5 items-center bg-transparent cursor-pointer  ${autoPlay ? "text-primary" : ""}`}>
+                                <Switch
+                                    checked={autoPlay}
+                                    onCheckedChange={() => {
+                                        if (autoPlay) {
+                                            toast("turn off Autoplay", { description: "You can see the list of words by clicking the AutoPlay Mode button" });
+                                        } else {
+                                            toast("Autoplay", { description: "You can see the list of words by clicking the AutoPlay Mode button" });
+                                        }
+                                        setAutoPlay((prev: boolean) => !prev);
+                                    }}
+                                ></Switch>
                                 <MdOutlineAutoMode size={24}></MdOutlineAutoMode>
                                 <Large>Autoplay</Large>
-                            </SheetClose>
+                            </div>
                         </div>
                     </SheetContent>
                 </Sheet>
