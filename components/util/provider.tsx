@@ -42,7 +42,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         const auth = getAuth(app);
         const fetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
-                if (use !== "") {
+                if (user) {
                     setUser(user.email || "");
                 } else {
                     setUser("");

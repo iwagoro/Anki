@@ -13,7 +13,7 @@ export const googleSignIn = () => {
         .then((result) => {
             const user = result.user;
             console.log(user);
-            return user;
+            return user.email || "";
         })
         .catch((error) => {
             // Handle Errors here.
