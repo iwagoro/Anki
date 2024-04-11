@@ -93,9 +93,9 @@ export const TopBar = () => {
                                     checked={isList}
                                     onCheckedChange={() => {
                                         if (isList) {
-                                            toast("turn off List Mode", { description: "You can see the list of words by clicking the list button" });
+                                            toast("turn off List Mode", { description: "You can see the list of words by clicking the List Mode button" });
                                         } else {
-                                            toast("List Mode", { description: "You can see the list of words by clicking the list button" });
+                                            toast("List Mode", { description: "You can see the list of words by clicking the List Mode button" });
                                         }
                                         setIsList((prev: boolean) => {
                                             if (!prev) setIsDB(prev);
@@ -112,9 +112,9 @@ export const TopBar = () => {
                                     checked={isDB}
                                     onCheckedChange={() => {
                                         if (isDB) {
-                                            toast("turn off Database Mode", { description: "You can see the list of words by clicking the list button" });
+                                            toast("turn off Database Mode", { description: "You can see the list of words by clicking the Database Mode  button" });
                                         } else {
-                                            toast("Database Mode", { description: "You can see the list of words by clicking the list button" });
+                                            toast("Database Mode", { description: "You can see the list of words by clicking the  Database Mode button" });
                                         }
                                         setIsDB((prev: boolean) => {
                                             if (!prev) setIsList(prev);
@@ -131,9 +131,9 @@ export const TopBar = () => {
                                     checked={isFocused}
                                     onCheckedChange={() => {
                                         if (isFocused) {
-                                            toast("turn off Focus Modee", { description: "You can see the list of words by clicking the list button" });
+                                            toast("turn off Focus Modee", { description: "You can see the list of words by clicking the Focus Mode button" });
                                         } else {
-                                            toast("Focus Mode", { description: "You can see the list of words by clicking the list button" });
+                                            toast("Focus Mode", { description: "You can see the list of words by clicking the Focus Mode button" });
                                         }
                                         setIsFocused((prev: boolean) => !prev);
                                     }}
@@ -146,9 +146,9 @@ export const TopBar = () => {
                                     checked={autoPlay}
                                     onCheckedChange={() => {
                                         if (autoPlay) {
-                                            toast("turn off Autoplay", { description: "You can see the list of words by clicking the list button" });
+                                            toast("turn off Autoplay", { description: "You can see the list of words by clicking the AutoPlay Mode button" });
                                         } else {
-                                            toast("Autoplay", { description: "You can see the list of words by clicking the list button" });
+                                            toast("Autoplay", { description: "You can see the list of words by clicking the AutoPlay Mode button" });
                                         }
                                         setAutoPlay((prev: boolean) => !prev);
                                     }}

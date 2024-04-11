@@ -13,7 +13,8 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 import { MdDelete, MdEdit } from "react-icons/md";
 import { AppContext } from "@/components/util/provider";
-import { set } from "date-fns";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const WordCardListView = ({ originWords }: { originWords: { word: string; definition: string; forgot: boolean }[] }) => {
     const param = useParams();
@@ -90,8 +91,10 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
 
     const [words, setWords] = useState<{ word: string; definition: string; forgot: boolean }[]>([]);
     const [index, setIndex] = useState(0);
+    const [quitCount, setQuitCount] = useState(0);
     const [focusWords, setFocusWords] = useState(words);
     const [focusIndex, setFocusIndex] = useState(0);
+    const router = useRouter();
     const param = useParams();
     const cardStyle = "flex flex-col items-center justify-center max-w-md w-full p-10  h-[400px]";
     const flipCard = () => {
@@ -103,14 +106,26 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
             if (focusIndex < focusWords.length - 1) {
                 setNext(true);
                 setFocusIndex(focusIndex + 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setNext(false);
             }
         } else {
             if (index < words.length - 1) {
                 setNext(true);
                 setIndex(index + 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setNext(false);
             }
         }
@@ -121,14 +136,26 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
             if (focusIndex > 0) {
                 setBack(true);
                 setFocusIndex(focusIndex - 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setBack(false);
             }
         } else {
             if (index > 0) {
                 setBack(true);
                 setIndex(index - 1);
+                setQuitCount(0);
             } else {
+                if (quitCount === 1) {
+                    router.push("/homeß");
+                }
+                toast("Good job! All words are learned.", { description: "click again to quit." });
+                setQuitCount(1);
                 setBack(false);
             }
         }
