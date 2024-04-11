@@ -7,10 +7,9 @@ import { createUserDoc } from "@/components/util/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
-import { signInWithRedirect, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, getRedirectResult } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from "@/components/util/firebase";
 import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
 export default function Login() {
     const router = useRouter();
 
@@ -57,15 +56,11 @@ export default function Login() {
     const googleSignInHandler = async () => {
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider);
-    };
-
-    useEffect(() => {
-        const auth = getAuth(app);
-        getRedirectResult(auth)
+        signInWithPopup(auth, provider)
             .then((result) => {
-                if (result === null) return;
                 const user = result.user;
+                console.log(user);
+
                 if (user.email === "") {
                     toast("Opps!", { description: "An error occured" });
                 } else {
@@ -75,9 +70,9 @@ export default function Login() {
                 }
             })
             .catch((error) => {
-                console.log("error --- " + error);
+                toast("Opps!", { description: "An error occured" });
             });
-    }, []);
+    };
 
     return (
         <div className="w-full h-full flex justify-center items-center ">
