@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Gauge } from "@mui/x-charts/Gauge";
 import { MdDelete, MdAdd, MdSearch } from "react-icons/md";
-import { addWordToPreset, deletePreset } from "./data-util";
+import { addWordToPreset, deletePreset, exportWordsToCSV } from "./data-util";
 import { useState, useContext } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -15,6 +15,7 @@ import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from "recharts
 import { H3 } from "./typography";
 import { Textarea } from "../ui/textarea";
 import { AppContext } from "./provider";
+import { CiExport } from "react-icons/ci";
 
 export const PresetCard = ({ name, description, length, known }: { name: string; description: string; length: number; known: number }) => {
     const [csv, setCSV] = useState("");
@@ -106,6 +107,16 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                                 </CardFooter>
                             </PopoverContent>
                         </Popover>
+
+                        <Button variant="outline">
+                            <CiExport
+                                onClick={async (e) => {
+                                    toast("copied to clipboard");
+                                    const csv = await exportWordsToCSV(user, name);
+                                    navigator.clipboard.writeText(csv);
+                                }}
+                            ></CiExport>
+                        </Button>
                     </div>
                 </CardFooter>
             </Card>

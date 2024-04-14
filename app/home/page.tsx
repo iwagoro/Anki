@@ -14,7 +14,7 @@ export default function Home() {
     const db = getFirestore(app);
     useEffect(() => {
         const fetchData = async () => {
-            const docRef = collection(db, "user", user, "presets");
+            const docRef = collection(db, "user", user, "presetNames");
             onSnapshot(docRef, (snapshot) => {
                 let data = [] as any[];
                 snapshot.docs.forEach((doc: DocumentData) => {
