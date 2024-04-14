@@ -137,26 +137,12 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                 setBack(true);
                 setFocusIndex(focusIndex - 1);
                 setQuitCount(0);
-            } else {
-                if (quitCount === 1) {
-                    router.push("/home");
-                }
-                toast("Good job! All words are learned.", { description: "click again to quit." });
-                setQuitCount(1);
-                setBack(false);
             }
         } else {
             if (index > 0) {
                 setBack(true);
                 setIndex(index - 1);
                 setQuitCount(0);
-            } else {
-                if (quitCount === 1) {
-                    router.push("/home");
-                }
-                toast("Good job! All words are learned.", { description: "click again to quit." });
-                setQuitCount(1);
-                setBack(false);
             }
         }
     };
