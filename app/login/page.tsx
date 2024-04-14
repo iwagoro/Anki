@@ -3,11 +3,13 @@ import { H1, Mute, H3 } from "@/components/util/typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { createUser, signIn } from "@/components/util/auth";
+import { createUserDoc } from "@/components/util/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
-import { googleSignIn } from "@/components/util/auth";
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from "@/components/util/firebase";
+import { getAuth } from "firebase/auth";
 export default function Login() {
     const router = useRouter();
 
@@ -20,13 +22,15 @@ export default function Login() {
             return;
         }
 
-        const user = await signIn(email.value, password.value);
-        if (user !== null && user !== undefined) {
-            toast("Opps!", { description: "An error occured" });
-        } else {
-            toast("Success", { description: "You have successfully signed in" });
-            router.push("/home");
-        }
+        const auth = getAuth(app);
+        signInWithEmailAndPassword(auth, email.value, password.value)
+            .then((userCredential: any) => {
+                router.push("/home");
+                toast("Success", { description: "You have successfully created an account" });
+            })
+            .catch((error: any) => {
+                toast("Opps!", { description: "An error occured" });
+            });
     };
 
     const signupHandler = async () => {
@@ -37,23 +41,37 @@ export default function Login() {
             return;
         }
 
-        const user = await createUser(email.value, password.value);
-        if (user !== null && user !== undefined) {
-            toast("Opps!", { description: "An error occured" });
-        } else {
-            router.push("/home");
-            toast("Success", { description: "You have successfully created an account" });
-        }
+        const auth = getAuth(app);
+        createUserWithEmailAndPassword(auth, email.value, password.value)
+            .then((userCredential: any) => {
+                router.push("/home");
+                createUserDoc(email.value);
+                toast("Success", { description: "You have successfully created an account" });
+            })
+            .catch((error: any) => {
+                toast("Opps!", { description: "An error occured" });
+            });
     };
 
     const googleSignInHandler = async () => {
-        const user = await googleSignIn();
-        if (user !== null && user !== undefined && user === "") {
-            toast("Opps!", { description: "An error occured" });
-        } else {
-            router.push("/home");
-            toast("Success", { description: "You have successfully signed in" });
-        }
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                console.log(user);
+
+                if (user.email === "") {
+                    toast("Opps!", { description: "An error occured" });
+                } else {
+                    console.log(user);
+                    router.push("/home");
+                    toast("Success", { description: "You have successfully signed in" });
+                }
+            })
+            .catch((error) => {
+                toast("Opps!", { description: "An error occured" });
+            });
     };
 
     return (
