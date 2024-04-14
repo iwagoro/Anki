@@ -20,7 +20,8 @@ export default function Home() {
         const fetchData = async () => {
             const docRef = doc(db, "user", user, "presets", param.cards as string);
             const words = await getWords(user, param.cards as string);
-            setWords(words);
+            const shuffledWords = words.sort(() => Math.random() - 0.5);
+            setWords(shuffledWords);
         };
         if (user !== "") fetchData();
     }, [user]);

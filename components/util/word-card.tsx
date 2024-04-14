@@ -109,7 +109,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                 setQuitCount(0);
             } else {
                 if (quitCount === 1) {
-                    router.push("/homeß");
+                    router.push("/home");
                 }
                 toast("Good job! All words are learned.", { description: "click again to quit." });
                 setQuitCount(1);
@@ -122,7 +122,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                 setQuitCount(0);
             } else {
                 if (quitCount === 1) {
-                    router.push("/homeß");
+                    router.push("/home");
                 }
                 toast("Good job! All words are learned.", { description: "click again to quit." });
                 setQuitCount(1);
@@ -139,7 +139,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                 setQuitCount(0);
             } else {
                 if (quitCount === 1) {
-                    router.push("/homeß");
+                    router.push("/home");
                 }
                 toast("Good job! All words are learned.", { description: "click again to quit." });
                 setQuitCount(1);
@@ -152,7 +152,7 @@ export const WordCardFlip = ({ originWords }: { originWords: { word: string; for
                 setQuitCount(0);
             } else {
                 if (quitCount === 1) {
-                    router.push("/homeß");
+                    router.push("/home");
                 }
                 toast("Good job! All words are learned.", { description: "click again to quit." });
                 setQuitCount(1);
