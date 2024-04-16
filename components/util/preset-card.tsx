@@ -40,38 +40,35 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
         lineHeight: "24px",
     };
     return (
-        <div className={`w-full md:w-[45%] `}>
+        <div className={`w-full h-full `}>
             <Card>
                 <Link href={`/${length !== 0 ? name : "home"}`}>
                     <CardHeader>
                         <CardTitle>{name}</CardTitle>
                         <CardDescription>last seen :{description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex flex-col items-center gap-3">
-                        <RadialBarChart width={240} height={240} data={data} innerRadius="60%" outerRadius="100%">
+                    <CardContent className="flex flex-col items-center ">
+                        <RadialBarChart width={150} height={150} data={data} innerRadius="60%" outerRadius="100%">
                             <RadialBar dataKey="x" />
-                            <text x={120} y={120} textAnchor="middle" dominantBaseline="middle" className="text-2xl font-semibold" style={{ fill: "#96908d" }}>
+                            <text x={75} y={75} textAnchor="middle" dominantBaseline="middle" className="text-md font-semibold " style={{ fill: "#96908d" }}>
                                 {known}/{length}
                             </text>
                         </RadialBarChart>
                     </CardContent>
                 </Link>
                 <CardFooter>
-                    <div className="w-full flex items-center justify-start gap-2">
-                        <Button variant="outline">
-                            <MdDelete
-                                onClick={async () => {
-                                    const date = format(new Date(), "yyyy-MM-dd");
-                                    await deletePreset(user, name);
-                                    toast(name + "was deleted sucessfully", { description: date });
-                                }}
-                            ></MdDelete>
-                        </Button>
+                    <div className="w-full grid grid-cols-3 justify-items-center">
+                        <MdDelete
+                            className="cursor-pointer"
+                            onClick={async () => {
+                                const date = format(new Date(), "yyyy-MM-dd");
+                                await deletePreset(user, name);
+                                toast(name + "was deleted sucessfully", { description: date });
+                            }}
+                        ></MdDelete>
                         <Popover>
                             <PopoverTrigger>
-                                <Button variant="outline">
-                                    <MdAdd></MdAdd>
-                                </Button>
+                                <MdAdd className="cursor-pointer"></MdAdd>
                             </PopoverTrigger>
                             <PopoverContent>
                                 <CardHeader>
@@ -108,25 +105,17 @@ export const PresetCard = ({ name, description, length, known }: { name: string;
                             </PopoverContent>
                         </Popover>
 
-                        <Button variant="outline">
-                            <CiExport
-                                onClick={async (e) => {
-                                    toast("copied to clipboard");
-                                    const csv = await exportWordsToCSV(user, name);
-                                    navigator.clipboard.writeText(csv);
-                                }}
-                            ></CiExport>
-                        </Button>
+                        <CiExport
+                            className="cursor-pointer"
+                            onClick={async (e) => {
+                                toast("copied to clipboard");
+                                const csv = await exportWordsToCSV(user, name);
+                                navigator.clipboard.writeText(csv);
+                            }}
+                        ></CiExport>
                     </div>
                 </CardFooter>
             </Card>
         </div>
     );
 };
-
-/**
- * 
-                        <Button variant="outline">
-                            <MdAdd onClick={async () => await addWordToPreset(csv, name)}></MdAdd>
-                        </Button>
- */

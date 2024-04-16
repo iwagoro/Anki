@@ -31,7 +31,7 @@ export default function Home() {
     return (
         <div className="py-[70px] w-full h-full px-5   overflow-scroll hidden-scrollbar">
             <AddCard></AddCard>
-            <div className="mt-10 gap-10 flex flex-wrap justify-between">
+            <div className="mt-10 gap-5 grid grid-cols-2 sm:grid-cols-3 auto-cols-fr">
                 {presets.map((preset: { name: string; description: string; length: number; known: number }) => (
                     <PresetCard key={preset.name} name={preset.name} description={preset.description} length={preset.length} known={preset.known}></PresetCard>
                 ))}
