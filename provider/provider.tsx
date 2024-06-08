@@ -30,7 +30,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
                     setUser({ ...userInfo, token });
                     setAuthStatus(1);
                 } catch {
-                    setAuthStatus(0);
+                    setAuthStatus(2);
                     router.push("/auth");
                 }
                 //? ログアウト
