@@ -10,6 +10,7 @@ export const getUserInfo = async (token: string) => {
                 Authorization: `Bearer ${token}`,
             },
         };
+        console.log(`${url}/user`);
         const res = await axios.get(`${url}/user`, config);
         return res.data.user;
     } catch {
