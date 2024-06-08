@@ -1,42 +1,52 @@
 "use client";
-import { useEffect, useState, useContext } from "react";
-import { PresetCard } from "@/components/util/preset-card";
-import { getPresets, addWordFromCSV } from "@/components/util/data-util";
-import { AddCard } from "@/components/util/add-card";
-import { useParams } from "next/navigation";
-import { collection, doc, onSnapshot, getFirestore, DocumentData } from "firebase/firestore";
-import { AppContext } from "@/components/util/provider";
+import React, { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { AddFolderDialog } from "@/components/util/add-folder-dialog";
+import { FolderCard } from "@/components/util/folder-card";
+import { LoadingDialog } from "@/components/util/loading-dialog";
+import { VocabListCard } from "@/components/util/vocab-list-card";
+import useHome from "./useHome";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
-import { app } from "@/components/util/firebase";
 export default function Home() {
-    const [presets, setPresets] = useState<{ name: string; description: string; length: number; known: number }[]>([]);
-    const { user } = useContext(AppContext);
-    const db = getFirestore(app);
-    useEffect(() => {
-        const fetchData = async () => {
-            const docRef = collection(db, "user", user, "presetNames");
-            onSnapshot(docRef, (snapshot) => {
-                let data = [] as any[];
-                snapshot.docs.forEach((doc: DocumentData) => {
-                    let result = doc.data();
-                    delete result.words;
-                    data.push(result);
-                });
-                setPresets(data);
-            });
-        };
-        if (user !== "") fetchData();
-    }, [user]);
+    const { wordLists, folders, isLoading, createFolder, user } = useHome();
+    const [folderName, setFolderName] = useState<string>("");
 
     return (
-        <div className="py-[70px] w-full h-full px-5   overflow-scroll hidden-scrollbar">
-            <AddCard></AddCard>
-            <div className="mt-10 gap-5 grid grid-cols-2 sm:grid-cols-3 auto-cols-fr">
-                {presets.map((preset: { name: string; description: string; length: number; known: number }) => (
-                    <PresetCard key={preset.name} name={preset.name} description={preset.description} length={preset.length} known={preset.known}></PresetCard>
-                ))}
-                <div className="flex-1 min-w-[240px]"></div>
-            </div>
+        <div className="w-full flex flex-col justify-start items-start gap-5">
+            <Card className="w-full">
+                <CardHeader className="w-full flex-row justify-between items-center">
+                    <CardTitle className="text-left">Folders</CardTitle>
+
+                    <AddFolderDialog createFolder={createFolder} />
+                </CardHeader>
+                <CardContent>
+                    {folders.map((folder, index) => (
+                        <FolderCard key={index} folder={folder} token={user.token} />
+                    ))}
+                </CardContent>
+            </Card>
+            <Card className="w-full">
+                <CardHeader className="w-full flex-row justify-between items-center">
+                    <CardTitle className="text-left">Lists</CardTitle>
+
+                    <Link href="/add-word/?type=image&step=0">
+                        <Button variant="outline" className="py-4">
+                            <Plus size={18} className="mr-3" />
+                            New List
+                        </Button>
+                    </Link>
+                </CardHeader>
+                <CardContent className="w-full grid grid-cols-2 gap-5">
+                    {wordLists.map((list, index) => (
+                        <VocabListCard key={index} list={list} token={user.token} />
+                    ))}
+                </CardContent>
+            </Card>
+
+            <LoadingDialog isLoading={isLoading} />
         </div>
     );
 }
