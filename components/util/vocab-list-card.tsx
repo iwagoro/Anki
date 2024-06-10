@@ -23,7 +23,7 @@ export const VocabListCard = ({ list, token }: { list: any; token: string }) => 
     return (
         <Card>
             <CardHeader className="w-full flex flex-row items-center">
-                <Link href={{ pathname: "/word-list", query: { name: list?.name } }} className="flex items-center w-full h-full">
+                <Link href={{ pathname: "/word-list", query: { id: list?.id } }} className="flex items-center w-full h-full">
                     <div className="p-3 rounded-xl mr-3 bg-primary">
                         <File size={28} />
                     </div>

@@ -22,7 +22,7 @@ export const H5 = ({ children, className }: { children: React.ReactNode; classNa
 };
 
 export const P = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-    return <p className={classNames("leading-7 [&:not(:first-child)]:mt-6", className)}>{children}</p>;
+    return <p className={classNames("leading-7 ", className)}>{children}</p>;
 };
 
 export const Large = ({ children, className }: { children: React.ReactNode; className?: string }) => {

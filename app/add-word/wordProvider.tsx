@@ -4,10 +4,13 @@ import { AppContext } from "@/provider/provider";
 import { useRouter } from "next/navigation";
 import { addWordsFromCsv as addWords, addWordsFromImage as addWords2, getWordMeaning as getMeaning } from "@/lib/api/word";
 import { set } from "react-hook-form";
+import useSentence from "@/lib/localStorage/useSentence";
+import { toZonedTime } from "date-fns-tz";
 
 export const WordContext = createContext(
     {} as {
         text: string;
+        setText: React.Dispatch<React.SetStateAction<string>>;
         csv: { word: string; definition: string }[];
         words: string[];
         selectedWordIndex: boolean[];
@@ -19,7 +22,9 @@ export const WordContext = createContext(
         makePhrase: () => void;
         createVocabList: (phrases: { word: string; definition: string }[]) => void;
         isLoading: boolean;
+        setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
         isCompleted: boolean;
+        savedSentences: { name: string; sentence: string; date: Date }[];
     }
 );
 
@@ -33,6 +38,7 @@ export const WordProvider = ({ children }: { children: React.ReactNode }) => {
     const [vocabListName, setVocabListName] = useState<string>("test");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
+    const { savedSentences, addSentence } = useSentence();
     const router = useRouter();
 
     //! テキストを単語に分割
@@ -56,6 +62,9 @@ export const WordProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(true);
         setVocabListName(name);
         const res = user!.token && (await addWords2(user.token, name, image));
+        const today = new Date();
+        const japan_date = toZonedTime(today, "Asia/Tokyo");
+        addSentence({ name: image.name, sentence: res, date: japan_date });
         setText(res);
         setIsLoading(false);
         router.push("/add-word/?type=image&step=1");
@@ -105,6 +114,7 @@ export const WordProvider = ({ children }: { children: React.ReactNode }) => {
 
     const contextValue = {
         text,
+        setText,
         csv,
         words,
         selectedWordIndex,
@@ -116,7 +126,9 @@ export const WordProvider = ({ children }: { children: React.ReactNode }) => {
         makePhrase,
         createVocabList,
         isLoading,
+        setIsLoading,
         isCompleted,
+        savedSentences,
     };
 
     return <WordContext.Provider value={contextValue}>{children}</WordContext.Provider>;

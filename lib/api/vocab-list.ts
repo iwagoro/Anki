@@ -33,14 +33,14 @@ export const getVocabListsNotInFolder = async (token: string) => {
 };
 
 //! 指定した英単語帳の単語を取得
-export const getVocabListWords = async (token: string, vocabListId: string) => {
+export const getVocabListWords = async (token: string, vocabListId: number) => {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const res = await axios.get(`${url}/vocab-list/?name=${vocabListId}`, config);
+        const res = await axios.get(`${url}/vocab-list/?id=${vocabListId}`, config);
         return res.data.words;
     } catch {
         return [];

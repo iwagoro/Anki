@@ -75,10 +75,6 @@ export const FolderCard = ({ folder, token }: { folder: any; token: string }) =>
                             </Button>
                         </DialogContent>
                     </Dialog>
-                    <DropdownMenuItem>
-                        <SquareMousePointer size={14} className="mr-2" />
-                        Manage
-                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
