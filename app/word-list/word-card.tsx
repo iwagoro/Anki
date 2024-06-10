@@ -8,14 +8,14 @@ import { X, Check, ChevronRight, ChevronLeft } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 
-import { incrementCollect, decrementCollect } from "@/lib/api/word";
+import useWord from "@/lib/localStorage/useWord";
 
-export const WordCardFlip = ({ words, list_name, token }: { words: { word: string; forgot: boolean; definition: string; id: number }[]; list_name: string; token: string }) => {
+export const WordCardFlip = ({ words, updateState }: { words: { id: number; word: string; definition: string; learned: boolean | null }[]; updateState: Function }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isShow, setIsShow] = useState(true);
     const [index, setIndex] = useState(0);
 
-    const cardStyle = `flex flex-col items-center justify-center w-full p-10 h-full ${words[index]?.forgot ? "border-primary" : ""}`;
+    const cardStyle = `flex flex-col items-center justify-center w-full p-10 h-full ${!words[index]?.learned ? "border-primary" : ""}`;
     const flipCard = () => setIsFlipped(!isFlipped);
 
     const nextPage = () => {
@@ -38,10 +38,10 @@ export const WordCardFlip = ({ words, list_name, token }: { words: { word: strin
     const handleCollect = async (wordId: number, isCollect: boolean) => {
         try {
             if (isCollect) {
-                await incrementCollect(token, wordId);
+                updateState(wordId, true);
                 nextPage();
             } else {
-                await decrementCollect(token, wordId);
+                updateState(wordId, false);
                 nextPage();
             }
         } catch (error) {
@@ -52,7 +52,6 @@ export const WordCardFlip = ({ words, list_name, token }: { words: { word: strin
     return (
         <div className="w-full h-full flex flex-col px-5  gap-10">
             <div className="w-full h-fit flex flex-col gap-5">
-                <H3 className="w-full text-center">{list_name}</H3>
                 <Progress value={((index + 1) * 100) / words.length} />
                 <Label className="w-full text-center">
                     {index + 1}/{words.length}

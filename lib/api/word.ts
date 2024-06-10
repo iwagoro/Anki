@@ -56,32 +56,17 @@ export const getWordMeaning = async (token: string, sentence: string, phrase: st
     }
 };
 
-//!　単語をcollectをインクリメントする
-export const incrementCollect = async (token: string, wordId: number) => {
+//!　単語のcorrect,incorectを更新
+export const updateWordState = async (token: string, words: { id: number; learned: boolean | null }[]) => {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const res = await axios.post(`${url}/word/correct/?id=${wordId}`, {}, config);
+        const res = await axios.put(`${url}/word`, { words: words }, config);
+        return res.data;
     } catch {
-        toast.error("collectのインクリメントに失敗しました");
-        throw new Error();
-    }
-};
-
-//!　単語をuncollectをデクリメントする
-export const decrementCollect = async (token: string, wordId: number) => {
-    try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-        const res = await axios.post(`${url}/word/incorrect/?id=${wordId}`, {}, config);
-    } catch {
-        toast.error("uncollectのデクリメントに失敗しました");
-        throw new Error();
+        toast.error("単語の更新に失敗しました");
     }
 };

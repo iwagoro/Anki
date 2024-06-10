@@ -11,7 +11,10 @@ import Link from "next/link";
 import { WordContext } from "./wordProvider";
 import { useContext } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DominoSpinner, WaveSpinner } from "react-spinners-kit";
+import { H3, P } from "@/components/ui/typography";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
     listName: string;
@@ -19,7 +22,7 @@ type Inputs = {
 };
 
 export default function AddWordFromImage() {
-    const { addWordsFromImage, isLoading, addWordsFromCsv } = useContext(WordContext);
+    const { addWordsFromImage, isLoading, addWordsFromCsv, savedSentences, setIsLoading, setText } = useContext(WordContext);
     //! react-hook-form
     const {
         register,
@@ -30,6 +33,7 @@ export default function AddWordFromImage() {
     //! useSearchParam
     const searchParams = useSearchParams();
     const addType = searchParams.get("type");
+    const router = useRouter();
 
     //! 画像から文章を取得
     const handleImageSubmit: SubmitHandler<Inputs> = (data) => {
@@ -83,6 +87,46 @@ export default function AddWordFromImage() {
                         <Button type="submit">Add</Button>
                     </CardFooter>
                 </form>
+            </Card>
+            <H3 className="w-full text-center font-light text-xl">or</H3>
+
+            <Card className="w-full">
+                <CardHeader>
+                    <CardTitle>View Sentences</CardTitle>
+                    <CardDescription>Use past sentence</CardDescription>
+                </CardHeader>
+                <CardContent className="w-full ">
+                    <Table>
+                        <TableCaption>A list of your recent invoices.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-5">ID</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead className="text-right">Action</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {savedSentences.map((item, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="w-5">{index}</TableCell>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.date!.toDateString()}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button
+                                            onClick={() => {
+                                                setText(item.sentence);
+                                                router.push("/add-word/?type=image&step=1");
+                                            }}
+                                        >
+                                            Submit
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
             </Card>
             <Dialog open={isLoading}>
                 <DialogContent>

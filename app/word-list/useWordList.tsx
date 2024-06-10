@@ -1,22 +1,26 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, use } from "react";
 import { AppContext } from "@/provider/provider";
 import { useSearchParams } from "next/navigation";
 import { getVocabListWords } from "@/lib/api/vocab-list";
+import useWord from "@/lib/localStorage/useWord";
 
 export default function useWordList() {
     const { user, setUser } = useContext(AppContext);
     const [words, setWords] = useState<any[]>([]);
+    const { savedWords, addWords, updateState } = useWord();
     const searchParams = useSearchParams();
-    const list_name = searchParams.get("name");
+    const list_id = parseInt(searchParams.get("id")!);
 
     useEffect(() => {
-        list_name &&
-            getVocabListWords(user.token, list_name).then((res) => {
+        list_id &&
+            user.token &&
+            getVocabListWords(user.token, list_id).then((res) => {
+                addWords(res);
                 setWords(res);
             });
-    }, [list_name]);
+    }, [list_id, user.token]);
 
-    return { user, words, list_name };
+    return { user, words, list_id, savedWords, updateState };
 }
