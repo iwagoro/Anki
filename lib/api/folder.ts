@@ -45,28 +45,31 @@ export const createFolder = async (token: string, folderName: string) => {
         };
         const res = await axios.post(`${url}/folder/?name=${folderName}`, {}, config);
         toast.success("フォルダを作成しました");
+        return res.data.folder;
     } catch {
         toast.error("フォルダの作成に失敗しました");
+        throw new Error();
     }
 };
 
 //! フォルダを削除する
-export const deleteFolder = async (token: string, folderId: string) => {
+export const deleteFolder = async (token: string, folderId: number) => {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const res = await axios.delete(`${url}/folder/?id=${folderId}`, config);
+        await axios.delete(`${url}/folder/?id=${folderId}`, config);
         toast.success("フォルダを削除しました");
     } catch {
         toast.error("フォルダの削除に失敗しました");
+        throw new Error();
     }
 };
 
 //! フォルダを更新する
-export const updateFolder = async (token: string, folderId: string, folderName: string) => {
+export const updateFolder = async (token: string, folderId: number, folderName: string) => {
     try {
         const config = {
             headers: {
@@ -77,5 +80,6 @@ export const updateFolder = async (token: string, folderId: string, folderName: 
         toast.success("フォルダを更新しました");
     } catch {
         toast.error("フォルダの更新に失敗しました");
+        throw new Error();
     }
 };

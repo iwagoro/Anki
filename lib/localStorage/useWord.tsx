@@ -40,7 +40,7 @@ export default function useWord() {
         [savedWords]
     );
 
-    //! 変更を反映する
+    //! 変更をDBに反映する
     const applyUpdate = useCallback(async () => {
         if (!user) return;
         if (savedWords.length === 0) return;
