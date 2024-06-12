@@ -26,7 +26,7 @@ export const signIn = async () => {
         const user = result.user;
         const token = await user.getIdToken();
         try {
-            const res = token && (await addUser(token));
+            const res = token && (await getUserInfo(token));
             window.location.href = "/";
         } catch {}
     });

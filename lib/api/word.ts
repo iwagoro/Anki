@@ -18,8 +18,24 @@ export const addWordsFromCsv = async (token: string, listName: string, csv: stri
     }
 };
 
+//! 配列から単語を追加
+export const addWordsFromArray = async (token: string, list_id: number, words: { word: string; definition: string }[]) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        const res = await axios.post(`${url}/word/array/?list_id=${list_id}`, { words }, config);
+        toast.success("単語の追加に成功しました");
+    } catch {
+        toast.error("単語の追加に失敗しました");
+        throw new Error();
+    }
+};
+
 //! 画像から単語を追加
-export const addWordsFromImage = async (token: string, listName: string, file: any) => {
+export const extractSentence = async (token: string, file: any) => {
     try {
         const config = {
             headers: {
@@ -27,7 +43,7 @@ export const addWordsFromImage = async (token: string, listName: string, file: a
                 "Content-Type": "multipart/form-data",
             },
         };
-        const res = await axios.post(`${url}/word/image/?vocab_list=${listName}`, { file }, config);
+        const res = await axios.post(`${url}/word/image`, { file }, config);
         return res.data.text;
     } catch {
         toast.error("単語の追加に失敗しました");
@@ -52,7 +68,7 @@ export const getWordMeaning = async (token: string, sentence: string, phrase: st
         return res.data.meanings;
     } catch {
         toast.error("単語の意味の取得に失敗しました");
-        return "";
+        throw new Error();
     }
 };
 

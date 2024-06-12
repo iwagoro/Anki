@@ -71,12 +71,6 @@ export const Drawer = () => {
                         <Large>Add Word From Image</Large>
                     </Link>
                 </SheetClose>
-                <SheetClose className="w-full pb-5 border-b-[1px] border-border" asChild>
-                    <Link href="/folder" className={`flex gap-5 items-center  bg-transparent curosr-pointer`}>
-                        <Folder size={24} />
-                        <Large>Add Folder</Large>
-                    </Link>
-                </SheetClose>
             </SheetContent>
         </Sheet>
     );
