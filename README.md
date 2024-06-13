@@ -16,11 +16,14 @@ Anki はあらゆる言語にの勉強をサポートする単語帳 Web アプ�
 ## 技術スタック
 
 ### フロントエンド
+
+<div style="display:flex;gap:1.25rem;">
 <img src="https://img.shields.io/badge/-Next.js-000000.svg?logo=next.js&style=flat-square">
 <img src="https://img.shields.io/badge/-tailwindcss-000000.svg?logo=tailwindcss&style=flat-square">
 <img src="https://img.shields.io/badge/-shadcn-000000.svg?logo=shadcnui&style=flat-square">
 <img src="https://img.shields.io/badge/-firebase-000000.svg?logo=firebase&style=flat-square">
 <img src="https://img.shields.io/badge/-vercel-000000.svg?logo=vercel&style=flat-square">
+</div>
 
 ### バックエンド
 <div style="display:flex;gap:1.25rem;">
