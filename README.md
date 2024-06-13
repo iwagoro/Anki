@@ -1,38 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # Anki
-# Anki
+
+Anki はあらゆる言語にの勉強をサポートする単語帳Web アプリです。従来の単語帳アプリの不便なところを払拭し、より効率的な勉強を推進します。
+
+## 特徴
+- **通信環境の悪い場所でもストレスフリーな学習** : バックエンドとの通信は単語帳をめくるたびに行われるのではなく、ローカルに保存して一斉に行うため、ある程度通信環境が悪くても使用できます。
+- **厳格な苦手な単語の徹底的な排除** : 単語ごとに、正解回数と不正解回数の２つの値を持っています。不正解回数が正解回数よりも３多くなると、自動的に苦手な単語へと追加されます。これを解除するには正解回数が不正解回数が一緒になるまで正解する必要があります。また、正解回数は不正解回数＋１よりも多くなることはありません。
+- **最も無駄な単語帳作成時間を排除** : 単語帳を作成するのは最も無駄な時間です。その時間に何個の単語を学習できるでしょうか。しかしこのアプリでは、ChatGPTとcloud visionを使い作成時間を大幅削減を可能にします。ニュース記事や英語論文など、文章が含まれた画像をアップロードすると、自動で文章が抽出されます。文章から任意の単語を選ぶと、その文章を考慮した意味をChatGPTが生成します。
+- **隙間時間の有効活用** : 単語学習の履歴はリアルタイムで保存されます。途中で学習を終了しても学習履歴はリセットされず記録されます。
+
+## 使用方法
+![image](https://github.com/iwagoro/Anki/assets/42830468/478efba1-0c2f-4516-82e2-995fe41115dd)
+
+- 本アプリにログインするとhome画面に飛ばされます。ここでフォルダ、単語帳、苦手な単語集を選択し、学習することができます。
+
+### Lists
+- 単語帳の一覧を表示します。単語帳カードを押すことですぐに学習を始められます。またプログレスバーにより一目で簡単に進捗を確認できます。
+
+### Folders
+ - フォルダーの一覧を表示します。
+
+###
+
