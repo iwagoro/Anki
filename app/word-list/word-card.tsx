@@ -8,14 +8,17 @@ import { X, Check, ChevronRight, ChevronLeft } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 
+import useWordList from "./useWordList";
+
 import useWord from "@/lib/localStorage/useWord";
 
-export const WordCardFlip = ({ words, updateState }: { words: { id: number; word: string; definition: string; learned: boolean | null }[]; updateState: Function }) => {
+export const WordCardFlip = () => {
+    const { words, setWords, updateState } = useWordList();
     const [isFlipped, setIsFlipped] = useState(false);
     const [isShow, setIsShow] = useState(true);
     const [index, setIndex] = useState(0);
 
-    const cardStyle = `flex flex-col items-center justify-center w-full p-10 h-full ${!words[index]?.learned ? "border-primary" : ""}`;
+    const cardStyle = `flex flex-col items-center justify-center w-full p-10 h-full ${words[index]?.learned ? "" : "border-primary"}`;
     const flipCard = () => setIsFlipped(!isFlipped);
 
     const nextPage = () => {
@@ -39,9 +42,13 @@ export const WordCardFlip = ({ words, updateState }: { words: { id: number; word
         try {
             if (isCollect) {
                 updateState(wordId, true);
+                setWords(words.map((word) => (word.id === wordId ? { ...word, learned: true } : word)));
+                console.log(isCollect);
                 nextPage();
             } else {
                 updateState(wordId, false);
+                setWords(words.map((word) => (word.id === wordId ? { ...word, learned: false } : word)));
+                console.log(words);
                 nextPage();
             }
         } catch (error) {

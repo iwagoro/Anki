@@ -7,6 +7,13 @@
 // });
 
 module.exports = {
-    // //next.js config
-    // reactStrictMode: true,
+    // webpack: (config, { isServer }) => {
+    //     if (!isServer) {
+    //         config.externals = config.externals || [];
+    //         config.externals.push({
+    //             canvas: "commonjs canvas",
+    //         });
+    //     }
+    //     return config;
+    // },
 };

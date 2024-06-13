@@ -22,5 +22,5 @@ export default function useWordList() {
             });
     }, [list_id, user.token]);
 
-    return { user, words, list_id, savedWords, updateState };
+    return { user, words, setWords, list_id, savedWords, updateState };
 }
