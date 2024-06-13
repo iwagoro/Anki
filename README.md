@@ -1,21 +1,3 @@
-<style>
-.column-left{
-  float: left;
-  width: 55%;
-  text-align: left;
-}
-.column-right{
-  float: right;
-  width: 42.5%;
-  text-align: left;
-}
-.column-one{
-  float: left;
-  width: 100%;
-  text-align: left;
-}
-</style>
-
 # Anki
 
 Anki はあらゆる言語にの勉強をサポートする単語帳 Web アプリです。従来の単語帳アプリの不便なところを払拭し、より効率的な勉強を推進します。
@@ -41,6 +23,8 @@ Anki はあらゆる言語にの勉強をサポートする単語帳 Web アプ�
 <img src="https://img.shields.io/badge/-vercel-000000.svg?logo=vercel&style=flat-square">
 
 ### バックエンド
+<div style="display:flex;gap:1.25rem;">
+  
 <img src="https://img.shields.io/badge/-fastapi-000000.svg?logo=fastapi&style=flat-square">
 <img src="https://img.shields.io/badge/-sqlalchemy-000000.svg?logo=sqlalchemy&style=flat-square">
 <img src="https://img.shields.io/badge/-postgresql-000000.svg?logo=postgresql&style=flat-square">
@@ -49,6 +33,7 @@ Anki はあらゆる言語にの勉強をサポートする単語帳 Web アプ�
 <img src="https://img.shields.io/badge/-openai-000000.svg?logo=openai&style=flat-square">
 <img src="https://img.shields.io/badge/-google%20cloud-000000.svg?logo=googlecloud&style=flat-square">
 <img src="https://img.shields.io/badge/-supabase-000000.svg?logo=supabase&style=flat-square">
+</div>
 
 
 ## データベース
