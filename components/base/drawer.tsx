@@ -8,7 +8,8 @@ import { useContext } from "react";
 import { AppContext } from "@/provider/provider";
 import { auth } from "@/lib/firebase";
 import { toast } from "sonner";
-import { FileSpreadsheet, Image, Folder } from "lucide-react";
+import { FileSpreadsheet, FileText } from "lucide-react";
+import { userType } from "@/lib/types";
 import Link from "next/link";
 //! ユーザーのログアウト
 export const logOut = async () => {
@@ -23,7 +24,7 @@ export const logOut = async () => {
 
 export const Drawer = () => {
     const { theme, setTheme } = useTheme();
-    const { user } = useContext(AppContext);
+    const { user, setUser } = useContext(AppContext);
     const router = useRouter();
     return (
         <Sheet>
@@ -51,6 +52,7 @@ export const Drawer = () => {
                         className={`flex gap-5 items-center  bg-transparent curosr-pointer`}
                         onClick={() => {
                             logOut();
+                            setUser({} as userType);
                             router.push("/auth");
                         }}
                     >
@@ -60,15 +62,15 @@ export const Drawer = () => {
                 </SheetClose>
 
                 <SheetClose className="w-full pb-5 border-b-[1px] border-border" asChild>
-                    <Link href="/add-word/?type=csv&step=0" className={`flex gap-5 items-center  bg-transparent curosr-pointer`}>
+                    <Link href="/add-word/?step=0" className={`flex gap-5 items-center  bg-transparent curosr-pointer`}>
                         <FileSpreadsheet size={24} />
-                        <Large>Add Word From CSV</Large>
+                        <Large>Add Word</Large>
                     </Link>
                 </SheetClose>
                 <SheetClose className="w-full pb-5 border-b-[1px] border-border" asChild>
-                    <Link href="/add-word/?type=image&step=0" className={`flex gap-5 items-center  bg-transparent curosr-pointer`}>
-                        <Image size={24} />
-                        <Large>Add Word From Image</Large>
+                    <Link href="/pdf/?step=1" className={`flex gap-5 items-center  bg-transparent curosr-pointer`}>
+                        <FileText size={24} />
+                        <Large>PDF</Large>
                     </Link>
                 </SheetClose>
             </SheetContent>

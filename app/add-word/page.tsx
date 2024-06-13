@@ -39,7 +39,10 @@ const Home = () => {
                     <CardTitle>Choose Type</CardTitle>
                     <CardDescription>Choose the method you want to use to add the word</CardDescription>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-5">
+                <CardContent className="grid grid-cols-3 gap-5">
+                    <Button variant="outline" className={type === "direct" ? "border-primary" : "border-border"} onClick={() => setType("direct")}>
+                        Direct
+                    </Button>
                     <Button variant="outline" className={type === "csv" ? "border-primary" : "border-border"} onClick={() => setType("csv")}>
                         CSV
                     </Button>

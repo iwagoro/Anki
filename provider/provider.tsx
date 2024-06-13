@@ -10,6 +10,9 @@ import { PushSpinner } from "react-spinners-kit";
 import { getVocabListsNotInFolder } from "@/lib/api/vocab-list";
 import { getFolder } from "@/lib/api/folder";
 
+import useVocabList from "@/lib/localStorage/useVocabList";
+import useFolder from "@/lib/localStorage/useFolder";
+
 export const AppContext = createContext(
     {} as {
         user: userType;
@@ -29,6 +32,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const [folders, setFolders] = useState<folderType[]>([]);
     const [difficultWords, setDifficultWords] = useState<wordType[]>([]);
     const [authStatus, setAuthStatus] = useState<0 | 1 | 2>(0); // 0: loading, 1: login, 2: logout
+    const { savedVocabList, updateVocabList } = useVocabList();
+    const { savedFolder, updateFolder } = useFolder();
     const path = usePathname(); // URL path
     const router = useRouter();
 
@@ -59,6 +64,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         if (user.token) {
             Promise.all([getVocabListsNotInFolder(user.token), getFolder(user.token)]).then(([vocabLists, folders]) => {
+                updateVocabList(vocabLists);
+                updateFolder(folders);
                 setVocabLists(vocabLists);
                 setFolders(folders);
             });
