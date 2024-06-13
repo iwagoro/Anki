@@ -9,8 +9,12 @@ export default function useVocabList() {
 
     useEffect(() => {
         const savedVocabList = localStorage.getItem("savedVocabList");
+        const recentId = localStorage.getItem("recentVocabList");
         if (savedVocabList) {
             setSavedVocabList(JSON.parse(savedVocabList));
+        }
+        if (recentId) {
+            setRecentId(JSON.parse(recentId));
         }
     }, []);
 
@@ -21,14 +25,22 @@ export default function useVocabList() {
     };
 
     const addRecentVocabList = (list_id: number) => {
-        if (recentId.length >= MAX_LEN) {
-            recentId.shift();
+        let newRecentId: number[] = [];
+        if (recentId.includes(list_id)) {
+            const index = recentId.indexOf(list_id);
+            newRecentId = [...recentId.slice(0, index), ...recentId.slice(index + 1)];
+            newRecentId.unshift(list_id);
+        } else {
+            localStorage.removeItem("recentVocabList");
+            newRecentId = [...recentId, list_id];
         }
-        localStorage.removeItem("recentVocabList");
-        const newRecentId = [...recentId, list_id];
+        if (newRecentId.length > MAX_LEN) {
+            newRecentId.pop();
+        }
+
         localStorage.setItem("recentVocabList", JSON.stringify(newRecentId));
         setRecentId(newRecentId);
     };
 
-    return { savedVocabList, updateVocabList, addRecentVocabList };
+    return { savedVocabList, updateVocabList, addRecentVocabList, recentId };
 }
