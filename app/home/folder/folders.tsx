@@ -7,19 +7,31 @@ import FolderItem from "./folder-item";
 import { createFolder, deleteFolder, updateFolder } from "@/lib/api/folder";
 
 export default function Folders() {
-    const { user, folders, setFolders } = useContext(AppContext);
+    const { user, folders, setFolders, isLoading, setIsLoading } = useContext(AppContext);
     const [newName, setNewName] = useState("");
 
     const create = async (folderName: string) => {
-        createFolder(user.token, folderName).then((folder) => setFolders((prev) => [...prev, folder]));
+        setIsLoading(true);
+        createFolder(user.token, folderName).then((folder) => {
+            setFolders((prev) => [...prev, folder]);
+            setIsLoading(false);
+        });
     };
 
     const archive = async (folder_id: number) => {
-        deleteFolder(user.token, folder_id).then(() => setFolders((prev) => prev.filter((folder) => folder.id !== folder_id)));
+        setIsLoading(true);
+        deleteFolder(user.token, folder_id).then(() => {
+            setFolders((prev) => prev.filter((folder) => folder.id !== folder_id));
+            setIsLoading(false);
+        });
     };
 
     const edit = async (folder_id: number) => {
-        await updateFolder(user.token, folder_id, newName).then(() => setFolders((prev) => prev.map((folder) => (folder.id === folder_id ? { ...folder, name: newName } : folder))));
+        setIsLoading(true);
+        await updateFolder(user.token, folder_id, newName).then(() => {
+            setFolders((prev) => prev.map((folder) => (folder.id === folder_id ? { ...folder, name: newName } : folder)));
+            setIsLoading(false);
+        });
     };
 
     return (
