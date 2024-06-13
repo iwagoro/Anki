@@ -1,23 +1,77 @@
+<style>
+.column-left{
+  float: left;
+  width: 55%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 42.5%;
+  text-align: left;
+}
+.column-one{
+  float: left;
+  width: 100%;
+  text-align: left;
+}
+</style>
+
 # Anki
 
-Anki はあらゆる言語にの勉強をサポートする単語帳Web アプリです。従来の単語帳アプリの不便なところを払拭し、より効率的な勉強を推進します。
+Anki はあらゆる言語にの勉強をサポートする単語帳 Web アプリです。従来の単語帳アプリの不便なところを払拭し、より効率的な勉強を推進します。
+
+![image](https://github.com/iwagoro/Anki/assets/42830468/a376bf5a-125d-49c5-a686-d59c2792f21a)
+
 
 ## 特徴
-- **通信環境の悪い場所でもストレスフリーな学習** : バックエンドとの通信は単語帳をめくるたびに行われるのではなく、ローカルに保存して一斉に行うため、ある程度通信環境が悪くても使用できます。
-- **厳格な苦手な単語の徹底的な排除** : 単語ごとに、正解回数と不正解回数の２つの値を持っています。不正解回数が正解回数よりも３多くなると、自動的に苦手な単語へと追加されます。これを解除するには正解回数が不正解回数が一緒になるまで正解する必要があります。また、正解回数は不正解回数＋１よりも多くなることはありません。
-- **最も無駄な単語帳作成時間を排除** : 単語帳を作成するのは最も無駄な時間です。その時間に何個の単語を学習できるでしょうか。しかしこのアプリでは、ChatGPTとcloud visionを使い作成時間を大幅削減を可能にします。ニュース記事や英語論文など、文章が含まれた画像をアップロードすると、自動で文章が抽出されます。文章から任意の単語を選ぶと、その文章を考慮した意味をChatGPTが生成します。
-- **隙間時間の有効活用** : 単語学習の履歴はリアルタイムで保存されます。途中で学習を終了しても学習履歴はリセットされず記録されます。
 
-## 使用方法
-![image](https://github.com/iwagoro/Anki/assets/42830468/478efba1-0c2f-4516-82e2-995fe41115dd)
+-   **通信環境の悪い場所でもストレスフリーな学習** : バックエンドとの通信は単語帳をめくるたびに行われるのではなく、ローカルに保存して一斉に行うため、ある程度通信環境が悪くても使用できます。
+-   **厳格な苦手な単語の徹底的な排除** : 単語ごとに、正解回数と不正解回数の２つの値を持っています。不正解回数が正解回数よりも３多くなると、自動的に苦手な単語へと追加されます。これを解除するには正解回数が不正解回数が一緒になるまで正解する必要があります。また、正解回数は不正解回数＋１よりも多くなることはありません。
+-   **最も無駄な単語帳作成時間を排除** : 単語帳を作成するのは最も無駄な時間です。その時間に何個の単語を学習できるでしょうか。しかしこのアプリでは、ChatGPT と cloud vision を使い作成時間を大幅削減を可能にします。ニュース記事や英語論文など、文章が含まれた画像をアップロードすると、自動で文章が抽出されます。文章から任意の単語を選ぶと、その文章を考慮した意味を ChatGPT が生成します。
+-   **隙間時間の有効活用** : 単語学習の履歴はリアルタイムで保存されます。途中で学習を終了しても学習履歴はリセットされず記録されます。
 
-- 本アプリにログインするとhome画面に飛ばされます。ここでフォルダ、単語帳、苦手な単語集を選択し、学習することができます。
 
-### Lists
-- 単語帳の一覧を表示します。単語帳カードを押すことですぐに学習を始められます。またプログレスバーにより一目で簡単に進捗を確認できます。
+## 技術スタック
 
-### Folders
- - フォルダーの一覧を表示します。
+### フロントエンド
+<img src="https://img.shields.io/badge/-Next.js-000000.svg?logo=next.js&style=flat-square">
+<img src="https://img.shields.io/badge/-tailwindcss-000000.svg?logo=tailwindcss&style=flat-square">
+<img src="https://img.shields.io/badge/-shadcn-000000.svg?logo=shadcnui&style=flat-square">
+<img src="https://img.shields.io/badge/-firebase-000000.svg?logo=firebase&style=flat-square">
+<img src="https://img.shields.io/badge/-vercel-000000.svg?logo=vercel&style=flat-square">
 
-###
+### バックエンド
+<img src="https://img.shields.io/badge/-fastapi-000000.svg?logo=fastapi&style=flat-square">
+<img src="https://img.shields.io/badge/-sqlalchemy-000000.svg?logo=sqlalchemy&style=flat-square">
+<img src="https://img.shields.io/badge/-postgresql-000000.svg?logo=postgresql&style=flat-square">
+<img src="https://img.shields.io/badge/-firebase-000000.svg?logo=firebase&style=flat-square">
+<img src="https://img.shields.io/badge/-pydantic-000000.svg?logo=pydantic&style=flat-square">
+<img src="https://img.shields.io/badge/-openai-000000.svg?logo=openai&style=flat-square">
+<img src="https://img.shields.io/badge/-google%20cloud-000000.svg?logo=googlecloud&style=flat-square">
+<img src="https://img.shields.io/badge/-supabase-000000.svg?logo=supabase&style=flat-square">
 
+
+## データベース
+
+
+![image](https://github.com/iwagoro/Anki/assets/42830468/e3c950a7-6c50-4115-a52f-926400922135)
+
+
+
+## セットアップ
+```
+# リポジトリをクローン
+git clone https://github.com/iwagoro/Anki.git
+
+# ディレクトリに移動
+cd Anki
+
+# 依存関係をインストール
+yarn install
+
+# 実行
+yarn dev
+```
+
+## ライセンス
+MIT
